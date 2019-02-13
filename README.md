@@ -1,3 +1,5 @@
 # IDEFIX
 
-robot lego
+Mot de passe wifi raspberry :
+    oasisTD8
+    @Deay2dh&
