@@ -4,42 +4,44 @@ package graph;
 public class Noeud {
     private int idNoeud;
     private String nom;
-    private double posX;
-    private double posY;
+    private boolean visite;
+
 
 
 
     Noeud (int id , String str) {
         idNoeud = id;
         nom = str;
-        posX = 0;
-        posY = 0;
-    }
-
-    Noeud (int id , String str, double x , double y) {
-        idNoeud = id;
-        nom = str;
-        posX = x;
-        posY = y;
-
+        visite = false;
     }
 
 
-    public int getIdNoeud() {
-        return idNoeud;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getNom() {
         return nom;
     }
 
-    public double gePosX() {
-        return posX;
+    public void setVisite(boolean visite) {
+        this.visite = visite;
     }
 
-    public double gePosY() {
-        return posY;
+    public boolean isVisite() {
+        return visite;
     }
+
+    public void setIdNoeud(int idNoeud) {
+        this.idNoeud = idNoeud;
+    }
+
+    public int getIdNoeud() {
+
+        return idNoeud;
+    }
+
+
 }
 
 

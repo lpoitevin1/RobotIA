@@ -3,31 +3,39 @@ package graph;
 public class main {
     public static void main (String [] args) {
 
-            Graphe g = new Graphe(6);
 
-            Noeud N1 = new Noeud(0,"A" , 2 ,2);
-            Noeud N2 = new Noeud(1,"B" , 2 ,3);
-            Noeud N3 = new Noeud(2,"C" , 3 ,3);
-            Noeud N4 = new Noeud(3,"D" , 2 ,9);
-            Noeud N5 = new Noeud(4,"E" , 5 ,3);
-            Noeud N6 = new Noeud(5,"F" , 3 ,7);
-
-            g.addNode(N1, N1);
-            g.addNode(N1, N2);
-            g.addNode(N1, N3);
-
-            g.addNode(N2, N3);
-
-            g.addNode(N3, N4);
-            g.addNode(N3, N5);
-
-            g.addNode(N4, N6);
+            /*          A
+                      /   \
+            *        B      C
+            *         \   /   \
+            *           D  ___ E
+            *
+            * */
 
 
+            Graphe g = new Graphe();
 
-            g.parcours(N1);
+            Noeud n1 = new Noeud(0,"A" );
+            Noeud n2 = new Noeud(1,"B" );
+            Noeud n3 = new Noeud(2,"C" );
+            Noeud n4 = new Noeud(3,"D" );
+            Noeud n5 = new Noeud(4,"E" );
+
+            g.addNode(n1);
+            g.addNode(n2);
+            g.addNode(n3);
+            g.addNode(n4);
+            g.addNode(n5);
 
 
+            g.addLink(n1, n2 ,1);
+            g.addLink(n1, n3,4);
+
+            g.addLink(n2, n4,8);
+            g.addLink(n3, n4,7);
+
+            g.addLink(n3, n5,1);
+            g.addLink(n4, n5,8);
 
 
 

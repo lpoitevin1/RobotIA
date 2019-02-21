@@ -1,95 +1,207 @@
 package graph;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 
 public class Graphe {
-    private int tailleG;
-    private LinkedList<Noeud> voisins[];
+    private List<Noeud> nodes;
+    private List<Arc> arcs;
 
-    Graphe(int taille) {
-        tailleG = taille;
-        voisins = new LinkedList[taille];
-        for (int i = 0; i < taille; ++i)
-            voisins[i] = new LinkedList();
+    Graphe() {
+        nodes = new ArrayList<Noeud>();
+        arcs = new ArrayList<Arc>();
     }
 
-    public void addNode(Noeud n1, Noeud n2) {
+    public void setNodes(List<Noeud> nodes) {
+        this.nodes = nodes;
+    }
 
-        voisins[n1.getIdNoeud()].add(n2);
-        voisins[n2.getIdNoeud()].add(n1);
 
+
+    /**
+     * Ajoute le Noeud au graphe
+     * @param n Noeud
+     */
+    public void addNode(Noeud n){
+        if(!nodes.contains(n)){
+            nodes.add(n);
+         }
+
+    }
+
+    /**
+     * ajoute l'arete n1 -> n2 , n2 -> n1
+     * @param n1 Noeud
+     * @param n2 Noeud
+     */
+    public void addLink(Noeud n1, Noeud n2 , double cost) {
+
+
+
+        Arc a = new Arc(n1, n2, cost);
+        if (!arcs.contains(a)) {
+            arcs.add(a);
+        }
+
+
+
+    }
+
+
+    public List<Arc> getArcs() {
+        return arcs;
+    }
+
+    /**
+     * accesseur nodes
+     * @return List<Noeud>
+     */
+    public List<Noeud> getNodes() {
+        return nodes;
+    }
+
+
+
+
+    /**
+     * calcule la distance pour parcourir l'arete (n1,n2) si elle existe sinon retourne Double.MaxValue
+     * @param n1 Noeud depart
+     * @param n2 Noeud arrivée
+     * @return distance de l'arete
+     */
+    public double calculerDistance (Noeud n1, Noeud n2) {
+        for(Arc a : arcs) {
+            if (a.getDebut().equals(n1) && a.getFin().equals(n2)) {
+                return a.getCout();
+            }
+        }
+        return Double.MAX_VALUE;
     }
 
 
     /**
-     * premier parcours de graphe
-     * @param source Noeud de départ du parcours
+     * affiche les arcs
      */
-    public void parcours (Noeud source) {
+    public void printArcs() {
+        for(Arc a : arcs) {
+            System.out.println(a.getDebut().getNom()
+                                + " -> " + a.getFin().getNom()
+                                +" cout : "+a.getCout());
+        }
+    }
 
-        // tableau pour vérifier quel noeud a deja été parcouru
 
-        boolean dejaVisite[] = new boolean[tailleG];
-        List<Noeud> queue = new ArrayList<Noeud>();
-        //on marque la source comme deja parcourue et on l'affiche (sa lettre)
-        dejaVisite[source.getIdNoeud()] = true;
-        queue.add(source);
+    /**
+     * retourne la liste des arcs a partir du noeud source
+     * @param n Noeud
+     * @return liste d'arcs
+     */
+    public List<Arc> getVoisins (Noeud n) {
+        List<Arc> voisins = new ArrayList<Arc>();
+        for(Arc a : arcs) {
+           if (a.getDebut().equals(n)) {
+               voisins.add(a);
+           }
+        }
+        return voisins;
+    }
 
-        while (queue.size() != 0) {
+    /**
+     * Retourne le meilleur arc
+     * @param voisins Liste de voisin
+     * @return Arc
+     */
+    public Arc meilleurVoisin (List<Arc> voisins) {
 
-            //on prend comme element courant la tete de liste (tant qu'elle n'est pas vide
-            source = queue.get(0);
-            queue.remove(0);
+        int indice = 0;
+        double curentMin = Double.MAX_VALUE;
+        Arc a;
 
-            //on affiche ses voisins
-            Iterator<Noeud> i = voisins[source.getIdNoeud()].listIterator();
-            while (i.hasNext()) {
-                Noeud voisin = i.next();
-                if (!dejaVisite[voisin.getIdNoeud()]) {
-                    System.out.println(source.getNom() + " -> " + voisin.getNom()
-                        + " distance : " + calculerDistance(source, voisin));
-                    dejaVisite[voisin.getIdNoeud()] = true;
-                    queue.add(voisin);
-
-                }
+        for (int i = 0; i < voisins.size() ; i++) {
+            a = voisins.get(i);
+            if(a.getCout() < curentMin) {
+                curentMin = a.getCout();
+                indice = i;
 
             }
         }
 
+        return voisins.get(indice);
     }
 
 
     /**
-     * affiche les voinsins d'un noeud
+     * Calcule le plus court chemin de proche en proche et choisis le meilleur voisin
+     * @param source Noeud depart
+     * @param dest Noeud arrive
+     * @return Liste Arc
      */
-    public void afficher (Noeud source) {
+    public List<Arc> Dijkstra (Noeud source , Noeud dest) {
+        resetVisited();
+        PriorityQueue<Noeud> aTraiter = new PriorityQueue<Noeud>();
+        List<Arc> voisins;
+        Arc next;
+        aTraiter.add(source);
+        Noeud current;
+        List<Arc> chemin = new ArrayList<Arc>();
 
-            Iterator<Noeud> i = voisins[source.getIdNoeud()].listIterator();
-            while (i.hasNext()) {
-                Noeud voisin = i.next();
+        while (!aTraiter.isEmpty()) {
+            current = aTraiter.poll();
+            current.setVisite(true);
 
-                System.out.println(source.getNom() + " -> " + voisin.getNom()
-                    + " distance : " + calculerDistance(source, voisin));
 
+            //calcul des voisins du noeud actuel
+            voisins = getVoisins (current);
+
+            //choix du meilleur voisin
+            if (!voisins.isEmpty()) {
+                next = meilleurVoisin(voisins);
+            } else break;
+
+
+
+            if (!next.getFin().isVisite() && next.getFin() != dest) {
+                aTraiter.add(next.getFin());
             }
+            chemin.add(next);
+            System.out.println(next.getDebut().getNom() + " -> " + next.getFin().getNom());
 
-
-    }
-
-
-    /**
-     * Retourne la distance entre le Noeud N1 et N2
-     * @param n1 Noeud
-     * @param n2 Noeud
-     * @return double
-     */
-    public double calculerDistance (Noeud n1, Noeud n2){
-        return Math.abs(n1.gePosX() - n2.gePosX()) + Math.abs(n1.gePosY() - n2.gePosY());
+        }
+        return chemin;
     }
 
 
 
-}
+
+
+
+
+    public void resetVisited(){
+        for(Noeud n :nodes) {
+            n.setVisite(false);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
