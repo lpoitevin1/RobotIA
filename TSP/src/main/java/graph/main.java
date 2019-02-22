@@ -28,14 +28,14 @@ public class main {
             g.addNode(n5);
 
 
-            g.addLink(n1, n2 ,1);
-            g.addLink(n1, n3,4);
+            n1.addLink(n2 ,1);
+            n1.addLink(n3,4);
 
-            g.addLink(n2, n4,8);
-            g.addLink(n3, n4,7);
+            n2.addLink(n4,8);
+            n3.addLink(n4,7);
 
-            g.addLink(n3, n5,1);
-            g.addLink(n4, n5,8);
+            n3.addLink(n5,1);
+            n4.addLink(n5,8);
 
 
 
