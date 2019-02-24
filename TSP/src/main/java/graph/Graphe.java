@@ -106,12 +106,15 @@ public class Graphe {
         return chemin;
     }
 
-
     /**
-     * Fournis une table des plus court chemins vers tous les noeuds
+     * 1 . Calcule la table des plus court chemins et des precedence (a partir du noeud source)
+     * 2 . Exploite la table pour construire le plus court chemin vers la destination
      * @param source noeud source
+     * @param dest noeud destination
+     * @return Liste de noeud contenant le plus court chemin source -> destination
      */
-    public void djikstrav2(Noeud source) {
+    public List<Noeud> djikstraRoutage(Noeud source , Noeud dest) {
+        List<Noeud> chemin = new ArrayList<Noeud>();
         resetVisited();
         List<Integer> aTraiter = new ArrayList<Integer>();
         Noeud curendNode;
@@ -137,14 +140,16 @@ public class Graphe {
                         index = i;
                     }
                 }
-            } else {
+
+            } else  {
+                // cas ou la queue n'a plus qu'un element
                 index = aTraiter.get(0);
                 aTraiter.remove(0);
             }
 
 
             for(int i = 0;i < aTraiter.size(); i++ ) {
-                if (aTraiter.get(i).equals(index)){
+                if (aTraiter.get(i).equals(index)) {
                     aTraiter.remove(i);
                     break;
                 }
@@ -161,13 +166,21 @@ public class Graphe {
                     dist[idNext] = cost;
                     pred[idNext] = curendNode;
 
-                    System.out.println(voisin.getDebut().getNom() + " -> " + voisin.getFin().getNom());
+                    //System.out.println(voisin.getDebut().getNom() + " -> " + voisin.getFin().getNom());
                 }
             }
         }
 
-        afficherDijkstraTxt(dist,pred);
+        //affichage txt de la table de routage
+        System.out.println("Source : " + source.getNom() + " Destination : " + dest.getNom() );
+        System.out.println(afficherDijkstraTxt(dist,pred));
 
+        //exploitation de la table
+        chemin = exploiterTableRoutage(dist,pred,source,dest);
+        //affichage du chemin
+        System.out.println(afficherChemin (chemin));
+
+        return chemin;
     }
 
 
@@ -175,42 +188,117 @@ public class Graphe {
     /**
      * procedure bourée de System.out.print qui permet d'avoir la table de routage de Djikstra
      * @param dist Table des distance de la source vers les noeuds [idNoeud1,IdNoeud2,...]
-     * @param pred Table des Next Hop pour arriver a la distance optimale
+     * @param pred Table des  pour arriver a la distance optimale
      */
-    public void afficherDijkstraTxt(double [] dist , Noeud [] pred){
+    public String afficherDijkstraTxt(double [] dist , Noeud [] pred) {
+        String retour = "";
 
-        System.out.println("");
-        System.out.print("Destination : ");
-        for(Noeud n : getNodes()) {
-            System.out.print( n.getNom() + "\t | ");
+        retour += "Destination : ";
+        for (Noeud n : getNodes()) {
+            retour +=  n.getNom() + "\t | ";
         }
-        System.out.println("");
+        retour += "\n";
 
-        System.out.print("Distance : ");
+        retour += "Distance : ";
         for (double d : dist) {
-            System.out.print(d + "\t | ");
+            retour += d + "\t | ";
         }
-        System.out.println("");
+        retour += "\n";
 
-        System.out.print("Next Hop : ");
+        retour += "Pred : \t";
         for (Noeud n : pred) {
             if (n != null) {
-                System.out.print(n.getNom() + "\t  | ");
+                retour += n.getNom() + "\t | ";
             } else {
-                System.out.print("NULL"+"\t | ");
+                retour +="NULL"+"\t | ";
             }
         }
-        System.out.println("");
 
+        return retour;
+    }
+
+
+    /**
+     * Parcours la table des plus court chemin et determine le plus court chemin pour le noeud source -> noeud dest
+     * @param dist Liste des distance calculé par Dijkstra
+     * @param pred Liste des Noeud precedents calculé par Dijkstra
+     * @param source Noeud source
+     * @param dest Noeud destination
+     * @return Liste de noeud (representant le chemin a parcourir)
+     */
+    public List<Noeud> exploiterTableRoutage(double [] dist,Noeud [] pred,Noeud source,Noeud dest) {
+        List<Noeud> chemin = new ArrayList<Noeud>();
+        List<Noeud> cheminInv  =  new ArrayList<Noeud>();
+        PriorityQueue<Noeud> queue = new PriorityQueue<Noeud>();
+        queue.add(dest);
+        Noeud currentDest;
+        Noeud currentPred;
+
+        while (!queue.isEmpty()) {
+            currentDest = queue.poll();
+            if (dist[currentDest.getIdNoeud()] < Double.MAX_VALUE
+                && pred[currentDest.getIdNoeud()] != null) {
+                // la distance n'est pas maximale et le noeud a bien un predecesseur
+
+                currentPred = pred[currentDest.getIdNoeud()];
+                //System.out.println("current Dest " + currentDest.getNom() + " current Pred " + currentPred.getNom());
+                cheminInv.add(currentDest);
+                queue.add(currentPred);
+
+            } else if (dist[currentDest.getIdNoeud()] == 0) {
+                // cas du Noeud de depart (on ajoute le noeud au chemin et on sors)
+                cheminInv.add(currentDest);
+            }
+
+        }
+
+        // on réordonne le chemin pour le retour
+        for (int i = cheminInv.size() - 1; i >=  0; i--) {
+            chemin.add(cheminInv.get(i));
+        }
+        cheminInv.clear();
+        return chemin;
+    }
+
+    /**
+     * affiche le chemin en txt
+     * @param chemin liste de noeuds
+     */
+    public String afficherChemin (List<Noeud> chemin) {
+        String str = "";
+        for (int i = 0 ;i < chemin.size() ; i++) {
+            str += chemin.get(i).getNom();
+            if (i < chemin.size() - 1) {
+                str += " -> ";
+            }
+        }
+        str += " \n";
+        return str;
     }
 
     /**
      * remise a zero des boolean visite pour tous les noeuds
      */
-    public void resetVisited(){
-        for(Noeud n :nodes) {
+    public void resetVisited() {
+        for (Noeud n :nodes) {
             n.setVisite(false);
         }
+    }
+
+
+    /**
+     * egalité entre deux liste de noeuds
+     * @param l1 Liste de Noeud
+     * @param l2 Liste de Noeud
+     * @return Boolean
+     */
+    public boolean isEqualsList(List<Noeud> l1 ,List<Noeud> l2 ) {
+        for (int i = 0 ; i < l1.size() ; i++) {
+            if(!l1.get(i).equalsNode(l2.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

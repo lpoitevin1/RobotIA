@@ -109,6 +109,19 @@ public class Noeud {
     }
 
 
+
+    public boolean equalsNode(Noeud n) {
+
+        for (int i = 0 ; i < this.arcs.size() ; i++) {
+            if (!this.arcs.get(i).isEquals(n.getArcs().get(i))) {
+                return false;
+            }
+        }
+        return (this.idNoeud == n.getIdNoeud())
+            && (this.nom == n.getNom())
+            && (this.visite == n.isVisite());
+
+    }
 }
 
 

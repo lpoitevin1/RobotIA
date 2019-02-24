@@ -12,6 +12,12 @@ import static org.junit.Assert.assertEquals;
 public class GraphTest {
 
     private Graphe g;
+    private Noeud n1;
+    private Noeud n2;
+    private Noeud n3;
+    private Noeud n4;
+    private Noeud n5;
+    private Noeud n6;
 
     /**
      * setup the Graph
@@ -24,22 +30,24 @@ public class GraphTest {
                      1 /   \ 4
             *        B      C
             *       8 \  7/   \ 1
-            *           D  ___ E
-            *               8
+            *           D  ___ E  __ F
+            *               8      1
             * */
 
 
-        Noeud n1 = new Noeud(0,"A" );
-        Noeud n2 = new Noeud(1,"B" );
-        Noeud n3 = new Noeud(2,"C" );
-        Noeud n4 = new Noeud(3,"D" );
-        Noeud n5 = new Noeud(4,"E" );
+         n1 = new Noeud(0,"A" );
+         n2 = new Noeud(1,"B" );
+         n3 = new Noeud(2,"C" );
+         n4 = new Noeud(3,"D" );
+         n5 = new Noeud(4,"E" );
+         n6 = new Noeud(5,"F" );
 
         g.addNode(n1);
         g.addNode(n2);
         g.addNode(n3);
         g.addNode(n4);
         g.addNode(n5);
+        g.addNode(n6);
 
 
         n1.addLink(n2 ,1);
@@ -50,6 +58,8 @@ public class GraphTest {
 
         n3.addLink(n5,1);
         n4.addLink(n5,8);
+
+        n5.addLink(n6,1);
 
 
 
@@ -79,10 +89,7 @@ public class GraphTest {
 
     @Test
     public void calculerDistance(){
-        Noeud n1 = g.getNodes().get(0);
-        Noeud n2 = g.getNodes().get(1);
-        Noeud n3 = g.getNodes().get(2);
-        Noeud n5 = g.getNodes().get(4);
+
 
         assertEquals(n1.calculerDistance(n2),1,0.1);
         assertEquals(n1.calculerDistance(n5),Double.MAX_VALUE,0.1);
@@ -90,11 +97,7 @@ public class GraphTest {
 
     @Test
     public void voisin(){
-        Noeud n1 = g.getNodes().get(0);
-        Noeud n2 = g.getNodes().get(1);
-        Noeud n3 = g.getNodes().get(2);
-        Noeud n4 = g.getNodes().get(3);
-        Noeud n5 = g.getNodes().get(4);
+
 
         List<Arc> voisin;
         List<Arc> attendu = new ArrayList<Arc>();
@@ -120,22 +123,44 @@ public class GraphTest {
     @Test
     public void Dijkstra() {
 
-        Noeud n1 = g.getNodes().get(0);
-        Noeud n3 = g.getNodes().get(2);
-        Noeud n5 = g.getNodes().get(4);
         g.dijkstra(n1,n5);
 
     }
 
     @Test
-    public void Dijkstra2() {
+    public void DijkstraRoutageBasique() {
+        List<Noeud> attendu = new ArrayList<Noeud>();
+        List<Noeud> res = new ArrayList<Noeud>();
 
-        Noeud n1 = g.getNodes().get(0);
-        Noeud n3 = g.getNodes().get(2);
-        Noeud n5 = g.getNodes().get(4);
-        g.djikstrav2(n1);
+        attendu.add(n1);
+        attendu.add(n3);
+        attendu.add(n5);
+        attendu.add(n6);
+
+        res = g.djikstraRoutage(n1,n6);
+        assert(g.isEqualsList(attendu,res));
+
+
+
+
+
+        g.djikstraRoutage(n3,n5);
 
     }
+
+
+    @Test
+    public void DijkstraRoutageUnreachableNode() {
+        // boucle infinie :)
+        // merci de lancer lalgo sur un chemin QUI EXISTE
+        Noeud n7 = new Noeud(6,"G" );
+        g.addNode(n7);
+
+
+       // g.djikstraRoutage(n2,n7);
+
+    }
+
 
 
 
