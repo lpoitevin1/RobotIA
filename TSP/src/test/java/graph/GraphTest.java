@@ -150,14 +150,35 @@ public class GraphTest {
 
 
     @Test
-    public void DijkstraRoutageUnreachableNode() {
+    public void CheckPath() {
         // boucle infinie :)
         // merci de lancer lalgo sur un chemin QUI EXISTE
         Noeud n7 = new Noeud(6,"G" );
         g.addNode(n7);
 
+        assert(g.existeChemin(n1,n6));
+        assert(!g.existeChemin(n1,n7));
 
-       // g.djikstraRoutage(n2,n7);
+
+    }
+
+
+    @Test
+    public void TSP() {
+        Noeud n7 = new Noeud(6,"G" );
+        g.addNode(n7);
+
+        List<Noeud> attendu = new ArrayList<Noeud>();
+        attendu.add(n1);
+        attendu.add(n2);
+
+        List<Noeud> res = g.plusCoutChemin(n1,n2);
+        assert (g.isEqualsList(res,attendu));
+
+
+        res = g.plusCoutChemin(n1,n7);
+        attendu = new ArrayList<Noeud>();
+        assert (g.isEqualsList(res,attendu));
 
     }
 

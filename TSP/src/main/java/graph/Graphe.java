@@ -23,8 +23,8 @@ public class Graphe {
      * Ajoute le Noeud au graphe
      * @param n Noeud
      */
-    public void addNode(Noeud n){
-        if(!nodes.contains(n)){
+    public void addNode(Noeud n) {
+        if (!nodes.contains(n)) {
             nodes.add(n);
          }
 
@@ -113,7 +113,7 @@ public class Graphe {
      * @param dest noeud destination
      * @return Liste de noeud contenant le plus court chemin source -> destination
      */
-    public List<Noeud> djikstraRoutage(Noeud source , Noeud dest) {
+    public List<Noeud> djikstraRoutage(Noeud source, Noeud dest) {
         List<Noeud> chemin = new ArrayList<Noeud>();
         resetVisited();
         List<Integer> aTraiter = new ArrayList<Integer>();
@@ -177,6 +177,7 @@ public class Graphe {
 
         //exploitation de la table
         chemin = exploiterTableRoutage(dist,pred,source,dest);
+
         //affichage du chemin
         System.out.println(afficherChemin (chemin));
 
@@ -300,6 +301,51 @@ public class Graphe {
         }
         return true;
     }
+
+
+    /**
+     * verrifie si il existe au moins un chemin entre n1 et n2
+     * @param n1 noeud
+     * @param n2 noeud
+     * @return boolean
+     */
+    public boolean existeChemin (Noeud n1 ,Noeud n2) {
+        List<Noeud> visite = new ArrayList<Noeud>();
+        List<Noeud> aTraiter = new ArrayList<Noeud>();
+        Noeud current;
+        aTraiter.add(n1);
+        while (!aTraiter.isEmpty()) {
+            current = aTraiter.get(0);
+            aTraiter.remove(0);
+            for (Arc a : current.getArcs()) {
+                if (a.getFin() == n2) {
+                    return true;
+                } else if (!visite.contains(a.getFin())) {
+                    aTraiter.add(a.getFin());
+                    visite.add(a.getFin());
+                }
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * appel a djikstra apres avoir vérifier l'existance d'un chemin dans le graphe
+     * @param source noeud source
+     * @param dest noeud destination
+     * @return liste de noeuds representant le chemin si il existe (vide sinon)
+     */
+    public List<Noeud> plusCoutChemin(Noeud source,Noeud dest) {
+        if (existeChemin (source,dest)) {
+            return djikstraRoutage(source,dest);
+        } else {
+            return new ArrayList<Noeud>();
+        }
+    }
+
+
+
 
 
 }
