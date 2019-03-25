@@ -50,16 +50,16 @@ public class GraphTest {
         g.addNode(n6);
 
 
-        n1.addLink(n2 ,1);
-        n1.addLink(n3,4);
+        n1.addLink(n2 ,1, 'N');
+        n1.addLink(n3,4, 'S');
 
-        n2.addLink(n4,8);
-        n3.addLink(n4,7);
+        n2.addLink(n4,8, 'O');
+        n3.addLink(n4,7, 'E');
 
-        n3.addLink(n5,1);
-        n4.addLink(n5,8);
+        n3.addLink(n5,1, 'E');
+        n4.addLink(n5,8, 'O');
 
-        n5.addLink(n6,1);
+        n5.addLink(n6,1, 'N');
 
 
 
@@ -73,7 +73,7 @@ public class GraphTest {
         Noeud N6 = new Noeud(5,"F" );
         g.addNode(N6);
 
-        assertEquals(g.getNodes().size(),6);
+        assertEquals(g.getNodes().size(),7);
 
     }
 
@@ -101,11 +101,11 @@ public class GraphTest {
 
         List<Arc> voisin;
         List<Arc> attendu = new ArrayList<Arc>();
-        attendu.add(new Arc(n3,n4,7));
-        attendu.add(new Arc(n3,n5,1));
+        attendu.add(new Arc(n3,n4,7, 'b'));
+        attendu.add(new Arc(n3,n5,1, 'g'));
 
         Arc best;
-        Arc bestAttendu = new Arc(n3,n5,1);
+        Arc bestAttendu = new Arc(n3,n5,1, 'b');
         voisin = n3.getArcs();
 
 
@@ -182,7 +182,16 @@ public class GraphTest {
 
     }
 
-
+    @Test
+    public void angleTest() {
+        assertEquals(180, n1.getArcs().get(0).angle(n1.getArcs().get(1)));  //N - S
+        assertEquals(-90, n1.getArcs().get(0).angle(n2.getArcs().get(0)));  //N - O
+        assertEquals(0, n2.getArcs().get(0).angle(n2.getArcs().get(0)));  //O - O
+        assertEquals(0, n1.getArcs().get(0).angle(n1.getArcs().get(0)));  //N - N
+        assertEquals(0, n1.getArcs().get(1).angle(n1.getArcs().get(1)));  //S - S
+        assertEquals(-90, n1.getArcs().get(1).angle(n3.getArcs().get(0)));  //S - E
+        assertEquals(0, n3.getArcs().get(0).angle(n3.getArcs().get(0)));  //E - E
+    }
 
 
 
