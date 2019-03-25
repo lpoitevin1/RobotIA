@@ -16,6 +16,9 @@ public class Arc {
     }
 
 
+    public Arc () {}
+
+
 
     public double getCout() {
         return cout;

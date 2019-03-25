@@ -20,6 +20,8 @@ public class Noeud {
         visite = false;
     }
 
+    Noeud(){}
+
 
     public void setNom(String nom) {
         this.nom = nom;

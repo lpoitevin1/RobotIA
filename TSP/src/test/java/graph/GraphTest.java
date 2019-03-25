@@ -194,6 +194,13 @@ public class GraphTest {
     }
 
 
+    @Test
+    public void test() {
+        List<Noeud> chemin =g.djikstraRoutage(n1,n6);
+        System.out.println(g.test(chemin));
+    }
+
+
 
 
 
