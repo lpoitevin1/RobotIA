@@ -20,6 +20,8 @@ public class Noeud {
         visite = false;
     }
 
+    Noeud(){}
+
 
     public void setNom(String nom) {
         this.nom = nom;
@@ -58,8 +60,8 @@ public class Noeud {
      * ajoute l'arete this -> n2
      * @param n2 Noeud
      */
-    public void addLink(Noeud n2 , double cost) {
-        Arc a = new Arc(this,n2, cost);
+    public void addLink(Noeud n2 , double cost, char direction) {
+        Arc a = new Arc(this,n2, cost, direction);
         if (!arcs.contains(a)) {
             arcs.add(a);
         }
@@ -70,6 +72,7 @@ public class Noeud {
      * ajoute les aretes this -> n2 , n2 -> this
      * @param n2 Noeud
      */
+    /*
     public void addDualLink(Noeud n2 , double cost) {
         Arc a1 = new Arc(this,n2, cost);
         Arc a2 = new Arc(n2,this, cost);
@@ -80,7 +83,7 @@ public class Noeud {
             n2.arcs.add(a2);
         }
     }
-
+    */
 
     /**
      * affiche les arcs
