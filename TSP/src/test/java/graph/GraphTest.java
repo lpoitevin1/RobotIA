@@ -119,14 +119,6 @@ public class GraphTest {
     }
 
 
-
-    @Test
-    public void Dijkstra() {
-
-        g.dijkstra(n1,n5);
-
-    }
-
     @Test
     public void DijkstraRoutageBasique() {
         List<Noeud> attendu = new ArrayList<Noeud>();
@@ -195,9 +187,9 @@ public class GraphTest {
 
 
     @Test
-    public void test() {
+    public void detailTrajet() {
         List<Noeud> chemin =g.djikstraRoutage(n1,n6);
-        System.out.println(g.test(chemin));
+        System.out.println(g.detailTrajet(chemin));
     }
 
 

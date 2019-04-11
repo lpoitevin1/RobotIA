@@ -7,17 +7,30 @@ import java.util.List;
 public class Noeud {
     private int idNoeud;
     private String nom;
-    private boolean visite;
     private List<Arc> arcs;
+    private double x;
+    private double y;
 
 
 
+
+    Noeud (int id ) {
+        arcs = new ArrayList<Arc>();
+        idNoeud = id;
+    }
 
     Noeud (int id , String str) {
         arcs = new ArrayList<Arc>();
         idNoeud = id;
         nom = str;
-        visite = false;
+    }
+
+    Noeud (int id , String str,double posX, double posY) {
+        arcs = new ArrayList<Arc>();
+        idNoeud = id;
+        nom = str;
+        x = posX;
+        y = posY;
     }
 
     Noeud(){}
@@ -39,14 +52,6 @@ public class Noeud {
         this.arcs = arcs;
     }
 
-    public void setVisite(boolean visite) {
-        this.visite = visite;
-    }
-
-    public boolean isVisite() {
-        return visite;
-    }
-
     public void setIdNoeud(int idNoeud) {
         this.idNoeud = idNoeud;
     }
@@ -55,6 +60,17 @@ public class Noeud {
 
         return idNoeud;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+
+
 
     /**
      * ajoute l'arete this -> n2
@@ -121,8 +137,7 @@ public class Noeud {
             }
         }
         return (this.idNoeud == n.getIdNoeud())
-            && (this.nom == n.getNom())
-            && (this.visite == n.isVisite());
+            && (this.nom == n.getNom());
 
     }
 }

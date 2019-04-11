@@ -1,5 +1,7 @@
 package graph;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,46 +67,6 @@ public class Graphe {
     }
 
 
-    /**
-     * Calcule le plus court chemin de proche en proche et choisis le meilleur voisin
-     * @param source Noeud depart
-     * @param dest Noeud arrive
-     * @return Liste Arc
-     */
-    public List<Arc> dijkstra(Noeud source, Noeud dest) {
-
-        resetVisited();
-        PriorityQueue<Noeud> aTraiter = new PriorityQueue<Noeud>();
-        List<Arc> voisins;
-        Arc next;
-        Noeud current;
-        List<Arc> chemin = new ArrayList<Arc>();
-
-        aTraiter.add(source);
-
-        while (!aTraiter.isEmpty()) {
-
-            current = aTraiter.poll();
-            current.setVisite(true);
-
-            //calcul des voisins du noeud actuel
-            voisins = current.getArcs();
-
-            //choix du meilleur voisin
-            if (!voisins.isEmpty()) {
-                next = meilleurVoisin(voisins);
-            } else break;
-
-
-            if (!next.getFin().isVisite() && next.getFin() != dest) {
-                aTraiter.add(next.getFin());
-            }
-            chemin.add(next);
-            System.out.println(next.getDebut().getNom() + " -> "
-                            + next.getFin().getNom());
-        }
-        return chemin;
-    }
 
     /**
      * 1 . Calcule la table des plus court chemins et des precedence (a partir du noeud source)
@@ -115,7 +77,6 @@ public class Graphe {
      */
     public List<Noeud> djikstraRoutage(Noeud source, Noeud dest) {
         List<Noeud> chemin = new ArrayList<Noeud>();
-        resetVisited();
         List<Integer> aTraiter = new ArrayList<Integer>();
         Noeud curendNode;
         int index;
@@ -277,14 +238,7 @@ public class Graphe {
         return str;
     }
 
-    /**
-     * remise a zero des boolean visite pour tous les noeuds
-     */
-    public void resetVisited() {
-        for (Noeud n :nodes) {
-            n.setVisite(false);
-        }
-    }
+
 
 
     /**
@@ -357,59 +311,15 @@ public class Graphe {
         Noeud n3 = new Noeud();
         Arc a1 = new Arc();
         Arc a2 = new Arc();
-        while (chemin.size() > 3) {
-           n1 = chemin.get(0);
-           n2 = chemin.get(1);
-           n3 = chemin.get(2);
+        if (chemin.size() > 2) {
+            while (chemin.size() > 3) {
+                n1 = chemin.get(0);
+                n2 = chemin.get(1);
+                n3 = chemin.get(2);
 
-           chemin.remove(2);
-           chemin.remove(1);
-           chemin.remove(0);
-           for (Arc a : n1.getArcs()) {
-               if (a.getFin() == n2) {
-                   a1 = a;
-                   break;
-               }
-           }
-            for (Arc a : n2.getArcs()) {
-                if (a.getFin() == n3) {
-                    a2 = a;
-                    break;
-                }
-            }
-            retour += "\n";
-            retour += n1.getNom()+"->"+n2.getNom() + "\n" ;
-            retour += a1.angle(a2)+ "\n";
-            retour += n2.getNom()+"->"+n3.getNom()+ "\n";
-        }
-
-        while (!chemin.isEmpty()) {
-            if(chemin.size() > 1) {
-                n1 = n3;
-                n2 = chemin.get(0);
-                n3 = chemin.get(1);
-                chemin.remove(0);
+                chemin.remove(2);
                 chemin.remove(1);
-
-
-                for (Arc a : n1.getArcs()) {
-                    if (a.getFin() == n2) {
-                        a1 = a;
-                        break;
-                    }
-                }
-                for (Arc a : n2.getArcs()) {
-                    if (a.getFin() == n3) {
-                        a2 = a;
-                        break;
-                    }
-                }
-            } else {
-                n1 = n2;
-                n2 = n3;
-                n3 = chemin.get(0);
                 chemin.remove(0);
-
                 for (Arc a : n1.getArcs()) {
                     if (a.getFin() == n2) {
                         a1 = a;
@@ -422,14 +332,77 @@ public class Graphe {
                         break;
                     }
                 }
+                retour += "\n";
+                retour += n1.getNom() + "->" + n2.getNom() + "\n";
+                retour += a1.angle(a2) + "\n";
+                retour += n2.getNom() + "->" + n3.getNom() + "\n";
             }
 
-            retour += a1.angle(a2)+ "\n";
-            retour += n2.getNom()+"->"+n3.getNom()+ "\n";
-        }
+            while (!chemin.isEmpty()) {
+                if (chemin.size() > 1) {
+                    n1 = n3;
+                    n2 = chemin.get(0);
+                    n3 = chemin.get(1);
+                    chemin.remove(1);
+                    chemin.remove(0);
+                    System.out.println(n1.getNom());
 
-        return retour;
+                    for (Arc a : n1.getArcs()) {
+                        if (a.getFin() == n2) {
+                            a1 = a;
+                            break;
+                        }
+                    }
+                    for (Arc a : n2.getArcs()) {
+                        if (a.getFin() == n3) {
+                            a2 = a;
+                            break;
+                        }
+                    }
+                } else {
+                    n1 = n2;
+                    n2 = n3;
+                    n3 = chemin.get(0);
+                    chemin.remove(0);
+
+                    for (Arc a : n1.getArcs()) {
+                        if (a.getFin() == n2) {
+                            a1 = a;
+                            break;
+                        }
+                    }
+                    for (Arc a : n2.getArcs()) {
+                        if (a.getFin() == n3) {
+                            a2 = a;
+                            break;
+                        }
+                    }
+                }
+
+                retour += a1.angle(a2) + "\n";
+                retour += n2.getNom() + "->" + n3.getNom() + "\n";
+            }
+            return retour;
+        } else {
+            if (chemin.size() == 2) {
+                return chemin.get(0).getNom() +" -> " + chemin.get(1).getNom();
+            } else {
+                return "";
+            }
+        }
     }
+
+
+    public void construirereGrapheLecture(String fichierNode, String fichierLinks)
+    {
+
+        LectureFichier lect = new LectureFichier("nodesTest","linksTest");
+        nodes = lect.lectureNoeuds();
+        lect.lectureArcs(nodes);
+    }
+
+
+
 
 
 }
