@@ -5,12 +5,12 @@ from ev3dev2.button import Button
 
 from time import sleep
 
-# RED = 20
-# BLANCH = 100
-# NOIR = 0
+Black = 1
+Red = 5
+White = 6
+Brown = 7
 
 # ROTATION = 90 * 4
-
 
 class Robot:
     def __init__(self, output_a, output_d):
@@ -32,7 +32,12 @@ class Robot:
         self.right_sp = 450
         self.left_sp = 450
 
-        self.lastColor = None
+        self.lastColor1 = None
+        self.lastColor2 = None
+        self.lastColor3 = None
+        self.node = [(0,0)]
+        # self.direction = None
+        self.directionStr = ['top', 'right', 'bottom', 'left']
 
 
     def demarrer(self, vitessA, vitessD):
@@ -67,8 +72,10 @@ class Robot:
         motor_turns_deg = 360
         if direction == 'left':
             motor_turns_deg = motor_turns_deg  # May require some tuning depending on your surface!
+            self.direction = (self.direction - 1) % 4
         else:
             motor_turns_deg = -motor_turns_deg
+            self.direction = (self.direction + 1) % 4
         
         self.left_motor.run_forever(speed_sp=motor_turns_deg)
         self.right_motor.run_forever(speed_sp=-motor_turns_deg)
@@ -85,26 +92,66 @@ class Robot:
 
 
     def run(self):
-        while not self.btn.any():    # exit loop when any button pressed
+        self.lastColor1 = self.cl.color
+        self.lastColor2 = self.cl.color
+        self.lastColor3 = self.cl.color
+        self.direction = 0
+        x = 0
+        y = 0
+        i = 0
+        while not self.btn.any() :    # exit loop when any button pressed
+            i = i + 1
             distance = self.us.value()/10 
             color = self.cl.color
+            self.beginAngle = self.gy.value()
+            direction = None
 
-            print("distance: " + str(distance))
-            print("color: " + str(color))
+            print("----------------------------------")
+            # print("tour : " + str(i))
+            # # print("distance: " + str(distance))
+            # print("color1 : " + str(self.lastColor1))
+            # print("color2 : " + str(self.lastColor2))
+            # print("color : " + str(color))
+            print("gyro: " + str(self.beginAngle))
 
             shouldTurn = False
 
             if (distance < 10):
                 shouldTurn = True
+                self.node.append((x,y))
 
-            # if (color != self.lastColor):
-            #     shouldTurn = True
-            #     self.lastColor = color
+            if (color != self.lastColor2):
+                self.lastColor1 = self.lastColor2
+                self.lastColor2 = self.lastColor3
+                self.lastColor3 = color
+
+            if (self.lastColor3 == self.lastColor1
+                and self.lastColor3 != self.lastColor2
+                and self.lastColor2 == Black):
+                shouldTurn = True
+                direction = "left"
+                self.lastColor1 = self.lastColor3
+                self.lastColor2 = self.lastColor3
+            elif (self.lastColor3 != self.lastColor1
+                and self.lastColor3 != self.lastColor2
+                and self.lastColor2 == Black):
+                shouldTurn = True
+                # direction = "right"
+                self.lastColor1 = self.lastColor3
+                self.lastColor2 = self.lastColor3
+
+            if (self.lastColor3 == White and self.lastColor1 == Red):
+                direction = "left"
+            elif (self.lastColor3 == White and self.lastColor1 == Red):
+                direction = "right"
 
             if (shouldTurn == True):
-                self.turn_90("left")
+                # self.turn_90(direction)
+                pass
             else:
-                self.drive()
+                # self.drive()
+                pass
+            # sleep(5)
 
         self.arrete()
 
