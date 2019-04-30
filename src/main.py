@@ -86,12 +86,41 @@ class Robot:
         
         self.arrete2()
         
+    def rotate(self):
+            motor_turns_deg = -360
+            
+            self.left_motor.run_forever(speed_sp=motor_turns_deg)
+            self.right_motor.run_forever(speed_sp=-motor_turns_deg)
+            wait = 0
+            found = False
+            while((self.cl.color == Brown or self.cl.color == Black )and wait < 5 and not self.btn.any()) :
+                sleep(0.1)
+                wait =  wait + 1
+                if self.cl.color == White or self.cl.color == Red :
+                    #print('FOUND = TRUE')
+                    found = True
+                    break
+            if found == False :
+                #print('FOUND = FALSE') 
+                motor_turns_deg = 360
+                self.left_motor.run_forever(speed_sp=motor_turns_deg)
+                self.right_motor.run_forever(speed_sp=-motor_turns_deg)
+                while (not self.btn.any()):
+                    print('current color : '+ str(self.cl.color))
+                    if self.cl.color == White or self.cl.color == Red :
+                        break
+                    sleep(0.1)
+
+            self.arrete2()
+
 
     def fini(self):
         exit()
 
 
     def run(self):
+        
+        self.arrete()
         self.lastColor1 = self.cl.color
         self.lastColor2 = self.cl.color
         self.lastColor3 = self.cl.color
@@ -100,10 +129,13 @@ class Robot:
         y = 0
         i = 0
         while not self.btn.any() :    # exit loop when any button pressed
+            if self.cl.color == Black or self.cl.color == Brown :
+                self.rotate()    
+            
             i = i + 1
             distance = self.us.value()/10 
             color = self.cl.color
-            self.beginAngle = self.gy.value()
+            self.beginAngle = self.gy.value()%360
             direction = None
 
             print("----------------------------------")
@@ -115,41 +147,42 @@ class Robot:
             print("gyro: " + str(self.beginAngle))
 
             shouldTurn = False
+            direction = "left"
 
             if (distance < 10):
                 shouldTurn = True
                 self.node.append((x,y))
 
-            if (color != self.lastColor2):
-                self.lastColor1 = self.lastColor2
-                self.lastColor2 = self.lastColor3
-                self.lastColor3 = color
+            # if (color != self.lastColor3):
+            #     self.lastColor1 = self.lastColor2
+            #     self.lastColor2 = self.lastColor3
+            #     self.lastColor3 = color
 
-            if (self.lastColor3 == self.lastColor1
-                and self.lastColor3 != self.lastColor2
-                and self.lastColor2 == Black):
-                shouldTurn = True
-                direction = "left"
-                self.lastColor1 = self.lastColor3
-                self.lastColor2 = self.lastColor3
-            elif (self.lastColor3 != self.lastColor1
-                and self.lastColor3 != self.lastColor2
-                and self.lastColor2 == Black):
-                shouldTurn = True
-                # direction = "right"
-                self.lastColor1 = self.lastColor3
-                self.lastColor2 = self.lastColor3
+            # if (self.lastColor3 == self.lastColor1
+            #     and self.lastColor3 != self.lastColor2
+            #     and self.lastColor2 == Black):
+            #     shouldTurn = True
+            #     direction = "left"
+            #     self.lastColor1 = self.lastColor3
+            #     self.lastColor2 = self.lastColor3
+            # elif (self.lastColor3 != self.lastColor1
+            #     and self.lastColor3 != self.lastColor2
+            #     and self.lastColor2 == Black):
+            #     shouldTurn = True
+            #     # direction = "right"
+            #     self.lastColor1 = self.lastColor3
+            #     self.lastColor2 = self.lastColor3
 
-            if (self.lastColor3 == White and self.lastColor1 == Red):
-                direction = "left"
-            elif (self.lastColor3 == White and self.lastColor1 == Red):
-                direction = "right"
+            # if (self.lastColor3 == White and self.lastColor1 == Red):
+            #     direction = "left"
+            # elif (self.lastColor3 == White and self.lastColor1 == Red):
+            #     direction = "right"
 
             if (shouldTurn == True):
-                # self.turn_90(direction)
+                self.turn_90(direction)
                 pass
             else:
-                # self.drive()
+                self.drive()
                 pass
             # sleep(5)
 
