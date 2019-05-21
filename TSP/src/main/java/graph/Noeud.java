@@ -70,8 +70,6 @@ public class Noeud {
     }
 
 
-
-
     /**
      * ajoute l'arete this -> n2
      * @param n2 Noeud

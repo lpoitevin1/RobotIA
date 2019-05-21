@@ -79,18 +79,20 @@ public class LectureFichier {
             String n2;
             double dist;
             char dir;
-
             Noeud node1 = new Noeud();
             Noeud node2 = new Noeud();
             while ((ligne = fichier.readLine()) != null) {
                 String[] out = ligne.split(" ");
+                if (out.length < 4) {
+                    break;
+                } else {
+                    n1 = out[0];
+                    n2 = out[1];
 
-                n1 = out[0];
-                n2 = out[1];
-                dist = Double.parseDouble(out[2]);
-                dir = out[3].charAt(0);
+                    dist = Double.parseDouble(out[2]);
+                    dir = out[3].charAt(0);
+                }
 
-                //n1.addLink(n2 ,1, 'O');
                 for(Noeud n : nodes) {
                     if (n.getNom().equals(n1)) {
                         node1 = n;
@@ -108,6 +110,7 @@ public class LectureFichier {
                 if (!node1.getNom().equals("") && !node2.getNom().equals("")) {
                     node1.addLink(node2,dist,dir);
                 }
+
             }
             fichier.close();
         } catch (Exception e) {

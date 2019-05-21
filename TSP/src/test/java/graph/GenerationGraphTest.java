@@ -60,7 +60,20 @@ public class GenerationGraphTest {
 
         Noeud n1 = g.getNodes().get(0);
         Noeud n2 = g.getNodes().get(1);
-        g.djikstraRoutage(n1,n2);
+        List<Noeud> chemin;
+
+        chemin = g.djikstraRoutage(n1,n2);
+        System.out.println(g.detailTrajet(chemin));
+
+        System.out.println("------------------------------");
+        n2 = g.getNodes().get(3);
+        chemin = g.djikstraRoutage(n1,n2);
+        System.out.println(g.detailTrajet(chemin));
+
+        System.out.println("------------------------------");
+        n2 = g.getNodes().get(4);
+        chemin = g.djikstraRoutage(n1,n2);
+        System.out.println(g.detailTrajet(chemin));
     }
 
 

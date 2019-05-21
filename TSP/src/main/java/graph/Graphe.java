@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
 public class Graphe {
     private List<Noeud> nodes;
 
-    Graphe() {
+    public Graphe() {
         nodes = new ArrayList<Noeud>();
     }
 
@@ -312,7 +312,7 @@ public class Graphe {
         Arc a1 = new Arc();
         Arc a2 = new Arc();
         if (chemin.size() > 2) {
-            while (chemin.size() > 3) {
+            while (chemin.size() >= 3) {
                 n1 = chemin.get(0);
                 n2 = chemin.get(1);
                 n3 = chemin.get(2);
@@ -393,13 +393,19 @@ public class Graphe {
     }
 
 
-    public void construirereGrapheLecture(String fichierNode, String fichierLinks)
-    {
+    /**
+     * Edite les noeuds du grahe en fonction de fichier de noeuds arc/noeuds fichier
+     * @param fichierNode noeuds du graphe
+     * @param fichierLinks aretes du graphe
+     */
+    public void construirereGrapheLecture(String fichierNode, String fichierLinks) {
 
-        LectureFichier lect = new LectureFichier("nodesTest","linksTest");
+        LectureFichier lect = new LectureFichier(fichierNode,fichierLinks);
         nodes = lect.lectureNoeuds();
         lect.lectureArcs(nodes);
     }
+
+
 
 
 
