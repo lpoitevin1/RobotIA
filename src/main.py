@@ -1,91 +1,43 @@
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_D, SpeedPercent, MoveTank, MoveJoystick,MoveSteering, SpeedPercent, Motor
-from ev3dev2.sensor.lego import ColorSensor, InfraredSensor, GyroSensor
+from ev3dev2.sensor.lego import ColorSensor, InfraredSensor, GyroSensor, UltrasonicSensor
 from ev3dev2.button import Button
 
 from time import sleep
 
-RED = 20
-BLANCH = 100
-NOIR = 0
+Black = 1
+Red = 5
+White = 6
+Brown = 7
 
-ROTATION = 90 * 4
-
-# class Robot:
-#     def __init__(self, output_a, output_d):
-#         self.moteurA = output_a
-#         self.moteurD = output_d
-#         self.move = MoveTank(self.moteurA, self.moteurD)
-
-#         assert self.moteurA.connected
-#         assert self.moteurD.connected
-
-#         self.btn = Button()
-
-#         self.cl = ColorSensor()
-#         self.ir = InfraredSensor()
-#         self.ir.mode = 'IR-PROX'
-
-#         self.speedA = 0
-#         self.speedD = 0
-
-
-#     def demarrer(self, vitessA, vitessD):
-#         self.move.on(vitessA, vitessD)
-#         self.speedA = vitessA
-#         self.speedD = vitessD
-
-
-#     def tourner(self, direction):
-#         self.arrete()
-#         self.move.on_for_degrees(-40, SpeedPercent(-40), direction)
-#         self.demarrer(self.speedA, self.speedD)
-
-
-#     def arrete(self):
-#         self.move.stop()
-
-
-#     def run(self):
-#         while not self.btn.any():    # exit loop when any button pressed
-#             distance = self.ir.value()
-#             print(self.cl.color)
-#             print(distance)
-#             print(9)
-
-#             # if we are over the black line (weak reflection)
-#             if self.cl.color == 5: # red 
-#                 # medium turn right
-#                 self.move.on(left_speed=-50, right_speed=-50)
-            
-#             if self.cl.color == 1:  # black
-#                 # medium turn left
-#                 self.move.on(left_speed=-50, right_speed=0)
-
-#             if self.cl.color == 6: # white
-#                 self.move.on(left_speed=0 , right_speed=-50)
-#             sleep(1) # wait for 0.1 seconds
-
+# ROTATION = 90 * 4
 
 class Robot:
     def __init__(self, output_a, output_d):
         self.right_motor = LargeMotor(output_a)
         self.left_motor = LargeMotor(output_d)
 
-        # assert self.right_motor.connected
-        # assert self.left_motor.connected
-
         self.btn = Button()
 
         self.cl = ColorSensor()
-        self.ir = InfraredSensor()
-        self.ir.mode = 'IR-PROX'
+
+        self.us = UltrasonicSensor()
+        self.us.mode='US-DIST-CM'
 
         self.gy = GyroSensor()
         self.gy.mode='GYRO-ANG'
 
+        self.defaultSpeed = 450
+
         self.right_sp = 450
         self.left_sp = 450
+
+        self.lastColor1 = None
+        self.lastColor2 = None
+        self.lastColor3 = None
+        self.node = [(0,0)]
+        # self.direction = None
+        self.directionStr = ['top', 'right', 'bottom', 'left']
 
 
     def demarrer(self, vitessA, vitessD):
@@ -94,73 +46,147 @@ class Robot:
         self.speedD = vitessD
 
 
-    # def tourner(self, direction):
-
-
     def arrete(self):
         self.left_motor.stop(stop_action="coast")
         self.right_motor.stop(stop_action="coast")
+
+
+    def arrete2(self):
+        self.left_motor.stop(stop_action="brake")
+        self.right_motor.stop(stop_action="brake")
 
 
     def drive(self):
         self.left_motor.run_forever(speed_sp=-self.left_sp)
         self.right_motor.run_forever(speed_sp=-self.right_sp)
     
+
     def drive_straight(self):
         self.left_motor.run_forever(speed_sp=-self.left_sp)
         self.right_motor.run_forever(speed_sp=-self.right_sp)
         sleep(0.6)
-        self.left_motor.stop(stop_action="brake")
-        self.right_motor.stop(stop_action="brake")
+        self.arrete2()
+
 
     def turn_90(self, direction):
-        # motor_turns_deg = 486
-        # if direction == 'left':
-        #     motor_turns_deg = motor_turns_deg  # May require some tuning depending on your surface!
-        # else:
-        #     motor_turns_deg = -motor_turns_deg
-        # self.left_motor.run_to_rel_pos(position_sp=motor_turns_deg, speed_sp=400)
-        # self.right_motor.run_to_rel_pos(position_sp=-motor_turns_deg, speed_sp=400)
-        # # Note, that there is no delay using the commands above, so we must wait
-        # self.left_motor.wait_while(Motor.STATE_RUNNING)  # Wait for the turn to finish
-        # self.right_motor.wait_while(Motor.STATE_RUNNING)  # Wait for the turn to finish
-        self.left_motor.run_forever(speed_sp=360)
-        self.right_motor.run_forever(speed_sp=-360)
-        begin = self.gy.value()
+        motor_turns_deg = 360
+        if direction == 'left':
+            motor_turns_deg = motor_turns_deg  # May require some tuning depending on your surface!
+            self.direction = (self.direction - 1) % 4
+        else:
+            motor_turns_deg = -motor_turns_deg
+            self.direction = (self.direction + 1) % 4
         
-        while(abs(begin - self.gy.value()) < 90 and not self.btn.any()) :
+        self.left_motor.run_forever(speed_sp=motor_turns_deg)
+        self.right_motor.run_forever(speed_sp=-motor_turns_deg)
+
+        begin = self.gy.value()
+        while(abs(begin - self.gy.value()) < 85 and not self.btn.any()) :
             sleep(0.01)
         
+        self.arrete2()
+        
+    def rotate(self):
+            motor_turns_deg = -360
+            
+            self.left_motor.run_forever(speed_sp=motor_turns_deg)
+            self.right_motor.run_forever(speed_sp=-motor_turns_deg)
+            wait = 0
+            found = False
+            while((self.cl.color == Brown or self.cl.color == Black )and wait < 5 and not self.btn.any()) :
+                sleep(0.1)
+                wait =  wait + 1
+                if self.cl.color == White or self.cl.color == Red :
+                    #print('FOUND = TRUE')
+                    found = True
+                    break
+            if found == False :
+                #print('FOUND = FALSE') 
+                motor_turns_deg = 360
+                self.left_motor.run_forever(speed_sp=motor_turns_deg)
+                self.right_motor.run_forever(speed_sp=-motor_turns_deg)
+                while (not self.btn.any()):
+                    print('current color : '+ str(self.cl.color))
+                    if self.cl.color == White or self.cl.color == Red :
+                        break
+                    sleep(0.1)
+
+            self.arrete2()
+
 
     def fini(self):
         exit()
 
 
     def run(self):
-        while not self.btn.any():    # exit loop when any button pressed
-            distance = self.ir.value()
-            # print(self.cl.color)
-            print("distance: " + str(distance))
-            if (distance < (30)) :
-                self.turn_90("right")
-            else:
-                self.drive_straight()
-
-            # if we are over the black line (weak reflection)
-            # if self.cl.color == ColorSensor.COLOR_RED: # red 
-            #     # medium turn right
-            #     # self.move.on(left_speed=-50, right_speed=-50)
-            #     self.turn_90("right")
+        
+        self.arrete()
+        self.lastColor1 = self.cl.color
+        self.lastColor2 = self.cl.color
+        self.lastColor3 = self.cl.color
+        self.direction = 0
+        x = 0
+        y = 0
+        i = 0
+        while not self.btn.any() :    # exit loop when any button pressed
+            if self.cl.color == Black or self.cl.color == Brown :
+                self.rotate()    
             
-            # if self.cl.color == ColorSensor.COLOR_BLACK:  # black
-            #     # medium turn left
-            #     # self.move.on(left_speed=-50, right_speed=0)
-            #     self.turn_90("left")
+            i = i + 1
+            distance = self.us.value()/10 
+            color = self.cl.color
+            self.beginAngle = self.gy.value()%360
+            direction = None
 
-            # if self.cl.color == ColorSensor.COLOR_WHITE: # white
-            #     # self.move.on(left_speed=0 , right_speed=-50)
-            #     self.drive_straight()
-            # sleep(1) # wait for 0.1 seconds
+            print("----------------------------------")
+            # print("tour : " + str(i))
+            # # print("distance: " + str(distance))
+            # print("color1 : " + str(self.lastColor1))
+            # print("color2 : " + str(self.lastColor2))
+            # print("color : " + str(color))
+            print("gyro: " + str(self.beginAngle))
+
+            shouldTurn = False
+            direction = "left"
+
+            if (distance < 10):
+                shouldTurn = True
+                self.node.append((x,y))
+
+            # if (color != self.lastColor3):
+            #     self.lastColor1 = self.lastColor2
+            #     self.lastColor2 = self.lastColor3
+            #     self.lastColor3 = color
+
+            # if (self.lastColor3 == self.lastColor1
+            #     and self.lastColor3 != self.lastColor2
+            #     and self.lastColor2 == Black):
+            #     shouldTurn = True
+            #     direction = "left"
+            #     self.lastColor1 = self.lastColor3
+            #     self.lastColor2 = self.lastColor3
+            # elif (self.lastColor3 != self.lastColor1
+            #     and self.lastColor3 != self.lastColor2
+            #     and self.lastColor2 == Black):
+            #     shouldTurn = True
+            #     # direction = "right"
+            #     self.lastColor1 = self.lastColor3
+            #     self.lastColor2 = self.lastColor3
+
+            # if (self.lastColor3 == White and self.lastColor1 == Red):
+            #     direction = "left"
+            # elif (self.lastColor3 == White and self.lastColor1 == Red):
+            #     direction = "right"
+
+            if (shouldTurn == True):
+                self.turn_90(direction)
+                pass
+            else:
+                self.drive()
+                pass
+            # sleep(5)
+
+        self.arrete()
 
 
 robot = Robot(OUTPUT_A, OUTPUT_D)
