@@ -309,8 +309,6 @@ public class Graphe {
         Noeud n1 = new Noeud();
         Noeud n2 = new Noeud();
         Noeud n3 = new Noeud();
-        Arc a1 = new Arc();
-        Arc a2 = new Arc();
         if (chemin.size() > 2) {
             while (chemin.size() >= 3) {
                 n1 = chemin.get(0);
@@ -320,21 +318,10 @@ public class Graphe {
                 chemin.remove(2);
                 chemin.remove(1);
                 chemin.remove(0);
-                for (Arc a : n1.getArcs()) {
-                    if (a.getFin() == n2) {
-                        a1 = a;
-                        break;
-                    }
-                }
-                for (Arc a : n2.getArcs()) {
-                    if (a.getFin() == n3) {
-                        a2 = a;
-                        break;
-                    }
-                }
+
                 retour += "\n";
                 retour += n1.getNom() + "->" + n2.getNom() + "\n";
-                retour += a1.angle(a2) + "\n";
+                retour += angle(n1,n2,n3) + "\n";
                 retour += n2.getNom() + "->" + n3.getNom() + "\n";
             }
 
@@ -346,40 +333,14 @@ public class Graphe {
                     chemin.remove(1);
                     chemin.remove(0);
                     System.out.println(n1.getNom());
-
-                    for (Arc a : n1.getArcs()) {
-                        if (a.getFin() == n2) {
-                            a1 = a;
-                            break;
-                        }
-                    }
-                    for (Arc a : n2.getArcs()) {
-                        if (a.getFin() == n3) {
-                            a2 = a;
-                            break;
-                        }
-                    }
                 } else {
                     n1 = n2;
                     n2 = n3;
                     n3 = chemin.get(0);
                     chemin.remove(0);
-
-                    for (Arc a : n1.getArcs()) {
-                        if (a.getFin() == n2) {
-                            a1 = a;
-                            break;
-                        }
-                    }
-                    for (Arc a : n2.getArcs()) {
-                        if (a.getFin() == n3) {
-                            a2 = a;
-                            break;
-                        }
-                    }
                 }
 
-                retour += a1.angle(a2) + "\n";
+                retour += angle(n1,n2,n3) + "\n";
                 retour += n2.getNom() + "->" + n3.getNom() + "\n";
             }
             return retour;
@@ -403,6 +364,24 @@ public class Graphe {
         LectureFichier lect = new LectureFichier(fichierNode,fichierLinks);
         nodes = lect.lectureNoeuds();
         lect.lectureArcs(nodes);
+    }
+
+
+    /**
+     * Pour 3 noeuds n1,n2,n3 donne l'angle correspondant
+     * @param n1 Noeud
+     * @param n2 Noeud
+     * @param n3 Noeud
+     * @return angle
+     */
+    public int angle (Noeud n1 , Noeud n2 , Noeud n3) {
+        if(n1.getX() == n2.getX() && n2.getX() == n3.getX()
+            || n1.getY() == n2.getY() && n2.getY() == n3.getY()) {
+            return 0;
+        } else if( n1.getY() < n2.getY() && n1.getX() > n3.getX()
+            ||n1.getY() > n2.getY() && n1.getX() < n3.getX()) {
+            return -90;
+        } else return 90;
     }
 
 

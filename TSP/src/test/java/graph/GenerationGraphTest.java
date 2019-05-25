@@ -3,7 +3,6 @@ package graph;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 public class GenerationGraphTest {
@@ -26,8 +25,8 @@ public class GenerationGraphTest {
 
         lect = new LectureFichier("nodesTest","linksTest");
 
-        n1 = new Noeud(0,"A" , 0,0 );
-        n2 = new Noeud(1,"B" , 1 ,0 );
+        n1 = new Noeud(0,"A" , 0,1 );
+        n2 = new Noeud(1,"B" , 0 ,0 );
         n3 = new Noeud(2,"C" , -1,0 );
 
 
@@ -37,8 +36,8 @@ public class GenerationGraphTest {
 
 
 
-        n1.addLink(n2 ,1, 'O');
-        n1.addLink(n3,1, 'E');
+        n1.addDualLink(n2 ,1);
+        n1.addDualLink(n3,1);
 
     }
 
@@ -75,6 +74,14 @@ public class GenerationGraphTest {
         chemin = g.djikstraRoutage(n1,n2);
         System.out.println(g.detailTrajet(chemin));
     }
+
+
+    @Test
+    public void angleTest(){
+        System.out.println(g.angle(n1,n2,n3));
+    }
+
+
 
 
 }

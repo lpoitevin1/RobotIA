@@ -1,7 +1,7 @@
 package graph;
 
 public class main {
-    public static void main (String [] args) {
+        public static void main (String [] args) {
 
 
             /*          A
@@ -15,11 +15,11 @@ public class main {
 
             Graphe g = new Graphe();
 
-            Noeud n1 = new Noeud(0,"A" );
-            Noeud n2 = new Noeud(1,"B" );
-            Noeud n3 = new Noeud(2,"C" );
-            Noeud n4 = new Noeud(3,"D" );
-            Noeud n5 = new Noeud(4,"E" );
+            Noeud n1 = new Noeud(0);
+            Noeud n2 = new Noeud(1);
+            Noeud n3 = new Noeud(2);
+            Noeud n4 = new Noeud(3);
+            Noeud n5 = new Noeud(4);
 
             g.addNode(n1);
             g.addNode(n2);
@@ -28,17 +28,15 @@ public class main {
             g.addNode(n5);
 
 
-            n1.addLink(n2 ,1, 'n');
-            n1.addLink(n3,4, 's');
+            n1.addDualLink(n2 ,1);
+            n1.addDualLink(n3,4);
 
-            n2.addLink(n4,8, 'o');
-            n3.addLink(n4,7, 'e');
+            n2.addDualLink(n4,8);
+            n3.addDualLink(n4,7);
 
-            n3.addLink(n5,1, 'o');
-            n4.addLink(n5,8, 'n');
-
-
+            n3.addDualLink(n5,1);
+            n4.addDualLink(n5,8);
 
         }
-    }
+}
 

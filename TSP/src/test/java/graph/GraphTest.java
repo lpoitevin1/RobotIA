@@ -35,12 +35,12 @@ public class GraphTest {
             * */
 
 
-         n1 = new Noeud(0,"A" );
-         n2 = new Noeud(1,"B" );
-         n3 = new Noeud(2,"C" );
-         n4 = new Noeud(3,"D" );
-         n5 = new Noeud(4,"E" );
-         n6 = new Noeud(5,"F" );
+         n1 = new Noeud(0 , "A");
+         n2 = new Noeud(1 , "B");
+         n3 = new Noeud(2, "C");
+         n4 = new Noeud(3, "D");
+         n5 = new Noeud(4, "E");
+         n6 = new Noeud(5, "F");
 
         g.addNode(n1);
         g.addNode(n2);
@@ -50,16 +50,16 @@ public class GraphTest {
         g.addNode(n6);
 
 
-        n1.addLink(n2 ,1, 'N');
-        n1.addLink(n3,4, 'S');
+        n1.addDualLink(n2 ,1);
+        n1.addDualLink(n3,4);
 
-        n2.addLink(n4,8, 'O');
-        n3.addLink(n4,7, 'E');
+        n2.addDualLink(n4,8);
+        n3.addDualLink(n4,7);
 
-        n3.addLink(n5,1, 'E');
-        n4.addLink(n5,8, 'O');
+        n3.addDualLink(n5,1);
+        n4.addDualLink(n5,8);
 
-        n5.addLink(n6,1, 'N');
+        n5.addDualLink(n6,1);
 
 
 
@@ -101,21 +101,16 @@ public class GraphTest {
 
         List<Arc> voisin;
         List<Arc> attendu = new ArrayList<Arc>();
-        attendu.add(new Arc(n3,n4,7, 'b'));
-        attendu.add(new Arc(n3,n5,1, 'g'));
+        attendu.add(new Arc(n3,n1,4));
+        attendu.add(new Arc(n3,n4,7));
+        attendu.add(new Arc(n3,n5,1));
 
-        Arc best;
-        Arc bestAttendu = new Arc(n3,n5,1, 'b');
         voisin = n3.getArcs();
 
 
         for(int i =0 ; i< attendu.size() ; i++){
             assert(attendu.get(i).isEquals(voisin.get(i)));
         }
-
-        //best = g.meilleurVoisin(voisin);
-
-        //assert(best.isEquals(bestAttendu));
     }
 
 
@@ -131,10 +126,6 @@ public class GraphTest {
 
         res = g.djikstraRoutage(n1,n6);
         assert(g.isEqualsList(attendu,res));
-
-
-
-
 
         g.djikstraRoutage(n3,n5);
 
@@ -174,16 +165,8 @@ public class GraphTest {
 
     }
 
-    @Test
-    public void angleTest() {
-        assertEquals(180, n1.getArcs().get(0).angle(n1.getArcs().get(1)));  //N - S
-        assertEquals(-90, n1.getArcs().get(0).angle(n2.getArcs().get(0)));  //N - O
-        assertEquals(0, n2.getArcs().get(0).angle(n2.getArcs().get(0)));  //O - O
-        assertEquals(0, n1.getArcs().get(0).angle(n1.getArcs().get(0)));  //N - N
-        assertEquals(0, n1.getArcs().get(1).angle(n1.getArcs().get(1)));  //S - S
-        assertEquals(-90, n1.getArcs().get(1).angle(n3.getArcs().get(0)));  //S - E
-        assertEquals(0, n3.getArcs().get(0).angle(n3.getArcs().get(0)));  //E - E
-    }
+
+
 
 
     @Test

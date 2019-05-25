@@ -4,15 +4,14 @@ public class Arc {
     private Noeud debut;
     private Noeud fin;
     private double cout;
-    private char direction;
 
 
 
-    public Arc (Noeud n1 , Noeud n2 , double c, char d) {
+
+    public Arc (Noeud n1 , Noeud n2 , double c) {
         debut = n1;
         fin = n2;
         cout = c;
-        direction = d;
     }
 
 
@@ -32,7 +31,6 @@ public class Arc {
         return fin;
     }
 
-    public char getDirection() { return direction; }
 
     public void setCout(double cout) {
         this.cout = cout;
@@ -46,10 +44,6 @@ public class Arc {
         this.fin = fin;
     }
 
-    public void setDirection(char d) {
-        this.direction = d;
-    }
-
 
     public boolean isEquals(Arc a) {
         boolean deb = debut.equals(a.getDebut());
@@ -58,7 +52,7 @@ public class Arc {
         return (cout == a.getCout() && deb && fi);
 
     }
-
+/*
     public int angle (Arc a) {
         int angle = 0;
 
@@ -83,7 +77,7 @@ public class Arc {
 
         return angle;
     }
-
+*/
 
 
     @Override

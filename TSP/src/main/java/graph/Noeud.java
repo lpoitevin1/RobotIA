@@ -74,8 +74,8 @@ public class Noeud {
      * ajoute l'arete this -> n2
      * @param n2 Noeud
      */
-    public void addLink(Noeud n2 , double cost, char direction) {
-        Arc a = new Arc(this,n2, cost, direction);
+    public void addLink(Noeud n2 , double cost) {
+        Arc a = new Arc(this,n2, cost);
         if (!arcs.contains(a)) {
             arcs.add(a);
         }
@@ -86,18 +86,12 @@ public class Noeud {
      * ajoute les aretes this -> n2 , n2 -> this
      * @param n2 Noeud
      */
-    /*
+
     public void addDualLink(Noeud n2 , double cost) {
-        Arc a1 = new Arc(this,n2, cost);
-        Arc a2 = new Arc(n2,this, cost);
-        if (!arcs.contains(a1)) {
-            arcs.add(a1);
-        }
-        if (!n2.arcs.contains(a2)) {
-            n2.arcs.add(a2);
-        }
+        this.addLink(n2,cost);
+        n2.addLink(this,cost);
     }
-    */
+
 
     /**
      * affiche les arcs

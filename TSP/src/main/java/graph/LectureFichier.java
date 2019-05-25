@@ -1,8 +1,6 @@
 package graph;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +40,10 @@ public class LectureFichier {
         this.nodesPath = nodesPath;
     }
 
+    /**
+     * Lis un fichier et genere les noeuds d'un graphe
+     * @return Liste de noeuds
+     */
     public ArrayList<Noeud> lectureNoeuds () {
         ArrayList<Noeud> nodes = new ArrayList<Noeud>();
         try {
@@ -71,6 +73,10 @@ public class LectureFichier {
         return nodes;
     }
 
+    /**
+     * lis un fichier et édite les arcs d'un graphe
+     * @param nodes Liste de Noeuds du graphe
+     */
     public void lectureArcs (List<Noeud> nodes) {
         try {
             String ligne;
@@ -108,7 +114,7 @@ public class LectureFichier {
                 }
 
                 if (!node1.getNom().equals("") && !node2.getNom().equals("")) {
-                    node1.addLink(node2,dist,dir);
+                    node1.addDualLink(node2,dist);
                 }
 
             }
