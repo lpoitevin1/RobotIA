@@ -14,18 +14,18 @@ public class Noeud {
 
 
 
-    Noeud (int id ) {
+    public Noeud (int id ) {
         arcs = new ArrayList<Arc>();
         idNoeud = id;
     }
 
-    Noeud (int id , String str) {
+    public Noeud (int id , String str) {
         arcs = new ArrayList<Arc>();
         idNoeud = id;
         nom = str;
     }
 
-    Noeud (int id , String str,double posX, double posY) {
+    public Noeud (int id , String str,double posX, double posY) {
         arcs = new ArrayList<Arc>();
         idNoeud = id;
         nom = str;
@@ -33,7 +33,7 @@ public class Noeud {
         y = posY;
     }
 
-    Noeud(){}
+    public Noeud(){}
 
 
     public void setNom(String nom) {

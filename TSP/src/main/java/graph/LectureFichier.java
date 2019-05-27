@@ -11,7 +11,7 @@ public class LectureFichier {
     private String linksPath;
 
 
-    LectureFichier(String nodes ,String links) {
+    public LectureFichier(String nodes, String links) {
         nodesPath = REPERORY_PATH + nodes;
         linksPath = REPERORY_PATH + links;
     }
