@@ -13,6 +13,7 @@ public class configTest {
     private Graphe g;
     private Plateau p;
     private GraphConfig graph;
+    private Dijkstra dikstra;
 
 
 
@@ -37,30 +38,54 @@ public class configTest {
         Noeud n0 = g.getNodes().get(0);
         Noeud n1 = g.getNodes().get(1);
         Noeud n2 = g.getNodes().get(2);
+        Noeud n3 = g.getNodes().get(3);
+        Noeud n4 = g.getNodes().get(4);
+        Noeud n5 = g.getNodes().get(5);
 
 
-        Configuration init = new Configuration(p.getRobots());
+        Configuration init = new Configuration(n0,n1,n2);
         graph = new GraphConfig(init);
 
-        Configuration c1 = new Configuration(n0,n1,n2);
-        Configuration c2 = new Configuration(n0,n1,n2);
-        Configuration c3 = new Configuration(n0,n2,n1);
-        Configuration cr = new Configuration(n1,n2,n0);
+
+        Configuration c1 = new Configuration(n0,n1,n3);
+        Configuration c2 = new Configuration(n0,n1,n4);
+
+        Configuration c3 = new Configuration(n4,n1,n3);
+        Configuration c4 = new Configuration(n0,n2,n3);
+
+        Configuration c5 = new Configuration(n4,n1,n2);
+        Configuration c6 = new Configuration(n4,n1,n0);
+
+
 
         graph.addConfig(c1);
         graph.addConfig(c2);
         graph.addConfig(c3);
-        graph.addConfig(cr);
+        graph.addConfig(c4);
+        graph.addConfig(c5);
+        graph.addConfig(c6);
 
 
-        init.addVoisins(c1);
-        init.addVoisins(cr);
-        c1.addVoisins(c2);
-        c1.addVoisins(c3);
 
-        for(Configuration c : graph.getNodes()) {
-            System.out.println(c.afficher());
-        }
+
+        init.addDualLink(c2,2);
+        init.addDualLink(c3,3);
+
+        c1.addDualLink(c3,2);
+        c1.addDualLink(c4,3);
+
+        c3.addDualLink(c5,2);
+        c3.addDualLink(c6,3);
+
+
+
+
+
+        dikstra  = new Dijkstra(graph);
+
+       System.out.println(graph.afficher());
+
+        dikstra.djikstraRoutage(init,c6);
 
     }
 }

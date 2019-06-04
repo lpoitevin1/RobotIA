@@ -27,14 +27,17 @@ public class GraphConfig {
     }
 
 
-
+    /**
+     * Verifie si la nouvelle configuration est valide , si oui l'ajoute au graphe
+     * @param c position des robots
+     */
     public void addConfig(Configuration c) {
-        Noeud n1 = c.getPositions()[0];
-        Noeud n2 = c.getPositions()[1];
-        Noeud n3 = c.getPositions()[2];
-        Configuration mirror = new Configuration(n1,n3,n2);
-
-
+        c.setiD(nodes.size());
+        Noeud n1 = c.getV1();
+        Noeud n2 = c.getV2();
+        Noeud n3 = c.getV3();
+        int id = c.getiD();
+        Configuration mirror = new Configuration(id,n1,n3,n2);
 
        for (Configuration n : nodes) {
            if (n.eq(c) || n.eq(mirror)) {
@@ -44,6 +47,22 @@ public class GraphConfig {
         nodes.add(c);
 
     }
+
+
+
+    public String afficher() {
+        String s ="";
+
+        for (Configuration p : nodes) {
+            s += " [ "
+                + p.getV1().getNom() + " ; "
+                + p.getV2().getNom() + " ; "
+                + p.getV3().getNom()  + " ]";
+        }
+
+        return s;
+    }
+
 
 
 
