@@ -160,6 +160,17 @@ public class Noeud {
     }
 
 
+    /**
+     * Calcule la distance euclidienne au carré entre 2 noeuds
+     * @param n2
+     * @return
+     */
+    public double distEuclidianNode(Noeud n2) {
+        return (Math.pow(this.x - n2.x, 2)
+            + Math.pow(this.y - n2.y, 2));
+    }
+
+
 }
 
 

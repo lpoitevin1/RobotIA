@@ -2,16 +2,19 @@ package graph;
 
 import Plateau.Plateau;
 import config.Configuration;
+import config.Dijkstra;
 import org.junit.Before;
 import org.junit.Test;
+import sun.security.krb5.Config;
 
 import java.util.List;
 
 public class PlateauTest {
 
-
+    private Dijkstra dik;
     private Plateau p;
     private Graphe g;
+    private Noeud r1;
 
 
     @Before
@@ -19,8 +22,7 @@ public class PlateauTest {
         p = new Plateau ("nodeGrille","linkGrille");
         g = p.getG();
 
-        System.out.println(g.getNodes().size());
-        Noeud r1 = g.getNodes().get(0);
+        r1 = g.getNodes().get(0);
         Noeud r2 = g.getNodes().get(1);
         Noeud r3 = g.getNodes().get(2);
         Noeud obj = g.getNodes().get(3);
@@ -49,6 +51,20 @@ public class PlateauTest {
 
 
         List<Configuration> l = p.access (0);
+
+    }
+
+
+    @Test
+    public void bruteForce() {
+        Noeud n15 = g.getNodes().get(15);
+
+        Configuration source = new Configuration(p.getRobots());
+        Configuration result = p.bruteForce(source,n15);
+
+        dik = new Dijkstra(p.getCoups());
+        System.out.println(dik.existeChemin(source,result));
+        //dik.djikstraRoutage(source,result);
 
     }
 }

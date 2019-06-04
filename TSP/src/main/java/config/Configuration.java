@@ -23,6 +23,14 @@ public class Configuration {
     }
 
 
+    public Configuration(Noeud [] robots) {
+        v1 = robots[0];
+        v2 = robots[1];
+        v3 = robots[2];
+        voisin = new ArrayList<ArcConfig>();
+    }
+
+
     public Configuration(int id ,Noeud n1, Noeud n2, Noeud n3) {
         iD = id;
         v1 = n1;
@@ -96,6 +104,13 @@ public class Configuration {
        return (this.getV1().equalsNode( c.v1)
            && this.getV2().equalsNode(c.v2)
            && this.getV3().equalsNode(c.v3));
+    }
+
+
+    public double generateCost(Configuration c2){
+        return v1.distEuclidianNode(c2.v1)
+            + v2.distEuclidianNode(c2.v2)
+            + v3.distEuclidianNode(c2.v3);
     }
 
 

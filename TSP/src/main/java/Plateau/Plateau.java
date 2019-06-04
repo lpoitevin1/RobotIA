@@ -1,9 +1,11 @@
 package Plateau;
 
 import config.Configuration;
+import config.GraphConfig;
 import graph.Graphe;
 import graph.Noeud;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +13,14 @@ public class Plateau {
     private Graphe g = new Graphe();
     private Noeud[] robots;
     private Noeud objectif;
+    private GraphConfig coups;
 
 
     public Plateau(String fichierNode, String fichierArc) {
         robots = new Noeud[3];
         g.construirereGrapheLecture(fichierNode, fichierArc);
     }
+
 
     public Graphe getG() {
         return g;
@@ -49,6 +53,13 @@ public class Plateau {
         robots[index] = n;
     }
 
+    public GraphConfig getCoups() {
+        return coups;
+    }
+
+    public void setCoups(GraphConfig coups) {
+        this.coups = coups;
+    }
 
     /**
      * Generation des configuration voisines
@@ -88,11 +99,43 @@ public class Plateau {
         } else return conf;
 
         for(Configuration c1 : conf) {
-            System.out.println(c1.printConfig());
+            //System.out.println(c1.printConfig());
         }
-
-
         return conf;
+    }
+
+
+    public Configuration bruteForce(Configuration source, Noeud dest) {
+        objectif = dest;
+        List<Configuration> visite = new ArrayList<Configuration>();
+        List<Configuration> aTraiter = new ArrayList<Configuration>();
+        List<Configuration> nouveauxCoups;
+        Configuration current;
+        coups = new GraphConfig(source);
+        aTraiter.add(coups.getNodes().get(0));
+        while (!aTraiter.isEmpty()) {
+            current = aTraiter.get(0);
+            aTraiter.remove(0);
+            visite.add(current);
+
+            robots[0] = current.getV1();
+            robots[1] = current.getV2();
+            robots[2] = current.getV3();
+            for (int i = 0; i < 3; i++) {
+                nouveauxCoups = access(i);
+                for(Configuration c : nouveauxCoups) {
+                    if (!visite.contains(c)) {
+                        aTraiter.add(c);
+                        coups.addConfig(c);
+                        current.addDualLink(c,current.generateCost(c));
+                    }
+                    if (c.getV1().samePosition(objectif)) {
+                        return c;
+                    }
+                }
+            }
+        }
+        return new Configuration();
     }
 
 }

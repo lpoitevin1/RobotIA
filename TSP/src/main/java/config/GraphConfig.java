@@ -50,6 +50,7 @@ public class GraphConfig {
 
 
 
+
     public String afficher() {
         String s ="";
 
