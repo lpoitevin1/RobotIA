@@ -132,6 +132,34 @@ public class Noeud {
             && (this.nom == n.getNom());
 
     }
+
+    /**
+     * Valeure absolue de la difference abscisse
+     * @param n2 Noeud
+     * @return double
+     */
+    public double diffX(Noeud n2) {
+        return Math.abs(this.x - n2.x);
+    }
+
+    /**
+     * Valeur absolue de la difference ordonée
+     * @param n2 Noeud
+     * @return double
+     */
+    public double diffY(Noeud n2) {
+        return Math.abs(this.y - n2.y);
+    }
+
+    /**
+     * egalité des x et y
+     * @param n Noeud
+     */
+    public boolean samePosition( Noeud n) {
+        return this.x == n.x && this.y == n.y;
+    }
+
+
 }
 
 

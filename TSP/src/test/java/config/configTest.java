@@ -88,4 +88,19 @@ public class configTest {
         dikstra.djikstraRoutage(init,c6);
 
     }
+
+
+
+
+    public void tesvoisin() {
+
+        Noeud n0 = g.getNodes().get(0);
+        Noeud n1 = g.getNodes().get(1);
+        Noeud n2 = g.getNodes().get(2);
+
+        Configuration init = new Configuration(n0,n1,n2);
+        graph = new GraphConfig(init);
+
+
+    }
 }

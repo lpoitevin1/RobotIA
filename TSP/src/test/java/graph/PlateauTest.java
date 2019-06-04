@@ -1,8 +1,11 @@
 package graph;
 
 import Plateau.Plateau;
+import config.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class PlateauTest {
 
@@ -34,5 +37,18 @@ public class PlateauTest {
         Noeud r1 = p.getRobots()[0];
         Noeud obj = p.getObjectif();
         g.djikstraRoutage(r1,obj);
+    }
+
+
+
+    @Test
+    public void access(){
+        Noeud r1 = p.getRobots()[0];
+        Noeud r2 = p.getRobots()[1];
+        Noeud r3 = p.getRobots()[2];
+
+
+        List<Configuration> l = p.access (0);
+
     }
 }

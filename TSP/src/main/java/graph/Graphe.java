@@ -381,6 +381,60 @@ public class Graphe {
         } else return 90;
     }
 
+    /**
+     * retourne le noeud en fin de chaine
+     * @param n
+     * @return
+     */
+    public List<Noeud> parcoursX( Noeud n) {
+        List<Noeud> parcours = new ArrayList<Noeud>();
+        List<Noeud> visited  =  new ArrayList<Noeud>();
+        List<Noeud> aTraiter = new ArrayList<Noeud>();
+        aTraiter.add(n);
+        Noeud currentDest;
+        while(!aTraiter.isEmpty()) {
+            currentDest = aTraiter.get(0);
+            aTraiter.remove(0);
+            for(Arc a : currentDest.getArcs()) {
+                if (a.getFin().getX() == n.getX() && !visited.contains(a.getFin())) {
+                    parcours.add(a.getFin());
+                    visited.add(a.getFin());
+                    aTraiter.add(a.getFin());
+                }
+            }
+        }
+
+        return parcours;
+    }
+
+
+
+    /**
+     * retourne le noeud en fin de chaine
+     * @param n
+     * @return
+     */
+    public List<Noeud> parcoursY( Noeud n) {
+        List<Noeud> parcours = new ArrayList<Noeud>();
+        List<Noeud> visited  =  new ArrayList<Noeud>();
+        List<Noeud> aTraiter = new ArrayList<Noeud>();
+        aTraiter.add(n);
+        Noeud currentDest;
+        while(!aTraiter.isEmpty()) {
+            currentDest = aTraiter.get(0);
+            aTraiter.remove(0);
+            for(Arc a : currentDest.getArcs()) {
+                if (a.getFin().getY() == n.getY() && !visited.contains(a.getFin())) {
+                    parcours.add(a.getFin());
+                    visited.add(a.getFin());
+                    aTraiter.add(a.getFin());
+                }
+            }
+        }
+
+        return parcours;
+    }
+
 
 
 

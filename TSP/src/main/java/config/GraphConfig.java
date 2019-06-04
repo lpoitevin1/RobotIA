@@ -64,6 +64,16 @@ public class GraphConfig {
     }
 
 
+    /**
+     * generation des configuration voisines en backtrack qui respectent la regle du jeu
+     * @return Configuration voisines
+     */
+    public List<Configuration> generationVoisin(Configuration c) {
+        Noeud n1 = c.getV1();
+        Noeud n2 = c.getV2();
+        Noeud n3 = c.getV3();
 
-
+        //generate
+       return new ArrayList<Configuration>();
+    }
 }
