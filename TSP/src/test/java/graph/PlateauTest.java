@@ -64,7 +64,14 @@ public class PlateauTest {
 
         dik = new Dijkstra(p.getCoups());
         System.out.println(dik.existeChemin(source,result));
-        //dik.djikstraRoutage(source,result);
+
+        System.out.println(source.printConfig());
+        System.out.println(result.printConfig());
+
+        dik.djikstraRoutage(source,result);
+
+        //System.out.println(dik.getG().afficher());
+
 
     }
 }

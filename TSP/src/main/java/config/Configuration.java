@@ -92,18 +92,9 @@ public class Configuration {
      * @return boolean
      */
     public boolean eq(Configuration c) {
-       if (c.voisin.size() == this.voisin.size()) {
-           for (int i = 0 ; i < c.voisin.size() ; i++) {
-               if (c.voisin.get(i) != this.voisin.get(i)) {
-                   return false;
-               }
-           }
-       } else {
-           return false;
-       }
-       return (this.getV1().equalsNode( c.v1)
-           && this.getV2().equalsNode(c.v2)
-           && this.getV3().equalsNode(c.v3));
+       return (this.getV1().samePosition( c.v1)
+           && this.getV2().samePosition(c.v2)
+           && this.getV3().samePosition(c.v3));
     }
 
 
@@ -118,6 +109,9 @@ public class Configuration {
 
 
 
+
+
+
     /**
      * Ajoute un lien
      * @param n2 config
@@ -125,7 +119,7 @@ public class Configuration {
      */
     public void addLink(Configuration n2 , double cost) {
         ArcConfig a = new ArcConfig(this,n2, cost);
-        if (!voisin.contains(a)) {
+        if (!voisin.contains(a) && !this.eq(n2)) {
             voisin.add(a);
         }
     }

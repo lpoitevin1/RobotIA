@@ -12,6 +12,14 @@ public class Dijkstra {
     }
 
 
+    public GraphConfig getG() {
+        return g;
+    }
+
+    public void setG(GraphConfig g) {
+        this.g = g;
+    }
+
     /**
      * 1 . Calcule la table des plus court chemins et des precedence (a partir du noeud source)
      * 2 . Exploite la table pour construire le plus court chemin vers la destination
@@ -20,7 +28,7 @@ public class Dijkstra {
      * @return Liste de noeud contenant le plus court chemin source -> destination
      */
     public List<Configuration> djikstraRoutage(Configuration source, Configuration dest) {
-        List<Configuration> chemin = new ArrayList<Configuration>();
+        List<Configuration> chemin;
         List<Integer> aTraiter = new ArrayList<Integer>();
         Configuration curendNode;
         int index;
@@ -35,6 +43,7 @@ public class Dijkstra {
         dist[source.getiD()] = 0;
 
         while (!aTraiter.isEmpty()) {
+
             //on traite le noeud ayant la distance la plus faible
             if (aTraiter.size() > 1) {
                 double distMin = Double.MAX_VALUE;
@@ -61,7 +70,6 @@ public class Dijkstra {
             }
 
             curendNode = g.getNodes().get(index);
-
 
             for(ArcConfig voisin : curendNode.getVoisin()) {
                 //on calcule la somme la distance pour acceder au noeud actuel + le cout de l'arc
