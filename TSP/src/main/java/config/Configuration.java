@@ -107,11 +107,6 @@ public class Configuration {
 
 
 
-
-
-
-
-
     /**
      * Ajoute un lien
      * @param n2 config

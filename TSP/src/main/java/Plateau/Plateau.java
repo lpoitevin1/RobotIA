@@ -68,29 +68,38 @@ public class Plateau {
      */
     public List<Configuration> access(int robot) {
         List<Configuration> conf = new ArrayList<Configuration>();
-        if(robot == 0) {
+        if (robot == 0) {
             for (Noeud n1 : g.getNodes()) {
                 if(robots[0].getX() == n1.getX() || robots[0].getY() == n1.getY()) {
-                    if (!n1.samePosition(robots[1]) && !n1.samePosition(robots[2])) {
-                            conf.add( new Configuration(n1,robots[1],robots[2]));
+                    if(!g.contrainteAllignee(robots[0],robots[1],n1)
+                        && !g.contrainteAllignee(robots[0],robots[2],n1)) {
+                        if (!n1.samePosition(robots[1]) && !n1.samePosition(robots[2])) {
+                            conf.add(new Configuration(n1, robots[1], robots[2]));
+                        }
                     }
                 }
 
             }
-        } else if (robot == 1){
+        } else if (robot == 1) {
             for (Noeud n1 : g.getNodes()) {
-                if(robots[1].getX() == n1.getX() || robots[1].getY() == n1.getY()) {
-                    if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[2])) {
-                        conf.add( new Configuration(robots[0],n1,robots[2]));
+                if (robots[1].getX() == n1.getX() || robots[1].getY() == n1.getY()) {
+                    if(!g.contrainteAllignee(robots[1],robots[0],n1)
+                        && !g.contrainteAllignee(robots[1],robots[2],n1)) {
+                        if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[2])) {
+                            conf.add(new Configuration(robots[0], n1, robots[2]));
+                        }
                     }
                 }
 
             }
-        } else if (robot == 2){
+        } else if (robot == 2) {
             for (Noeud n1 : g.getNodes()) {
-                if(robots[2].getX() == n1.getX() || robots[2].getY() == n1.getY()) {
-                    if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[1])) {
-                        conf.add( new Configuration(robots[0],robots[1],n1));
+                if (robots[2].getX() == n1.getX() || robots[2].getY() == n1.getY()) {
+                    if(!g.contrainteAllignee(robots[2],robots[0],n1)
+                        && !g.contrainteAllignee(robots[2],robots[1],n1)) {
+                        if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[1])) {
+                            conf.add(new Configuration(robots[0], robots[1], n1));
+                        }
                     }
                 }
 
@@ -103,6 +112,7 @@ public class Plateau {
         }
         return conf;
     }
+
 
 
     public Configuration bruteForce(Configuration source, Noeud dest) {

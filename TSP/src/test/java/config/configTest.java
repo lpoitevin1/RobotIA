@@ -91,7 +91,7 @@ public class configTest {
 
 
 
-
+    @Test
     public void tesvoisin() {
 
         Noeud n0 = g.getNodes().get(0);
@@ -100,7 +100,22 @@ public class configTest {
 
         Configuration init = new Configuration(n0,n1,n2);
         graph = new GraphConfig(init);
+    }
 
 
+    @Test
+    public void contrainteRobot () {
+        Noeud n0 = new Noeud(0,"",0,0);
+        Noeud n1 = new Noeud(0,"",0,1);
+        Noeud n2 = new Noeud(0,"",0,2);
+        Noeud n3 = new Noeud(0,"",1,2);
+        Noeud n4 = new Noeud(0,"",6,2);
+
+
+        assert(g.contrainteAllignee(n0,n1,n2));
+        assert(g.contrainteAllignee(n2,n1,n0));
+        assert(!g.contrainteAllignee(n0,n2,n2));
+        assert(!g.contrainteAllignee(n0,n3,n2));
+        assert(g.contrainteAllignee(n2,n3,n4));
     }
 }

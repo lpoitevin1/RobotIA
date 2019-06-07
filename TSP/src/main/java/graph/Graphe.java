@@ -435,6 +435,33 @@ public class Graphe {
         return parcours;
     }
 
+    /**
+     * vrai si le Noeud 1 -> Noeud 2 -> Noeud 3 sur la meme ligne/ colonne
+     *            Noeud 3 <- Noeud 2 <- Noeud 1
+     * @param n1 Depart
+     * @param n2 Noeud a tester
+     * @param n3 Objectif
+     * @return Boolean
+     */
+    public boolean contrainteAllignee(Noeud n1 , Noeud n2 , Noeud n3) {
+        if(n1.getX() == n2.getX() && n2.getX() == n3.getX()) {
+            if( (n1.getY() < n2.getY() && n2.getY() < n3.getY()) ||
+                (n1.getY() > n2.getY() && n2.getY() > n3.getY())) {
+                return true;
+            } else {
+                return false;
+            }
+        }else if (n1.getY() == n2.getY() && n2.getY() == n3.getY()) {
+            if( (n1.getX() < n2.getX() && n2.getX() < n3.getX()) ||
+                (n1.getX() > n2.getX() && n2.getX() > n3.getX())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
 
 
 
