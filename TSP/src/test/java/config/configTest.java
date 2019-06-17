@@ -20,6 +20,20 @@ public class configTest {
 
     @Before
     public void setup(){
+
+
+        /**
+         * n12 __ n13__ n14 __n15
+         * |    |     |     |
+         * n8__ n9__ n10 __n11
+         * |    |     |     |
+         * n4 __n5__ n6 __n7
+         * |    |     |    |
+         * n0 __n1__ n2 __n3
+         * v1   V2    V3
+         */
+
+
         p = new Plateau ("nodeGrille","linkGrille");
         g = p.getG();
 
@@ -35,6 +49,9 @@ public class configTest {
 
     @Test
     public void graphConfig(){
+
+
+
         Noeud n0 = g.getNodes().get(0);
         Noeud n1 = g.getNodes().get(1);
         Noeud n2 = g.getNodes().get(2);
@@ -83,7 +100,7 @@ public class configTest {
 
         dikstra  = new Dijkstra(graph);
 
-       System.out.println(graph.afficher());
+        System.out.println(graph.afficher());
 
         dikstra.djikstraRoutage(init,c6);
 
@@ -117,5 +134,10 @@ public class configTest {
         assert(!g.contrainteAllignee(n0,n2,n2));
         assert(!g.contrainteAllignee(n0,n3,n2));
         assert(g.contrainteAllignee(n2,n3,n4));
+    }
+
+    @Test
+    public void printFormeGrille() {
+        System.out.println(g.printFormeGrille());
     }
 }

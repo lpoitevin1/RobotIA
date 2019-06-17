@@ -21,6 +21,19 @@ public class Plateau {
         g.construirereGrapheLecture(fichierNode, fichierArc);
     }
 
+    /**
+     * Affiche les parametres de la partie
+     * @return string
+     */
+    public String print(){
+        String s = "";
+        for (int i = 0 ; i < robots.length ; i++) {
+            s += "robot " + i + " : "+ robots[i].getNom() + " ["+robots[i].getX()+","+robots[i].getY()+"] \n";
+        }
+        s+= "objectif : "+ objectif.getNom() + " ["+objectif.getX()+","+objectif.getY()+"] \n";
+        return s;
+    }
+
 
     public Graphe getG() {
         return g;
@@ -71,10 +84,12 @@ public class Plateau {
         if (robot == 0) {
             for (Noeud n1 : g.getNodes()) {
                 if(robots[0].getX() == n1.getX() || robots[0].getY() == n1.getY()) {
-                    if(!g.contrainteAllignee(robots[0],robots[1],n1)
-                        && !g.contrainteAllignee(robots[0],robots[2],n1)) {
-                        if (!n1.samePosition(robots[1]) && !n1.samePosition(robots[2])) {
-                            conf.add(new Configuration(n1, robots[1], robots[2]));
+                    if (g.existeChemin_X (n1 ,robots[0]) || g.existeChemin_Y (n1 ,robots[0])) {
+                        if (!g.contrainteAllignee(robots[0], robots[1], n1)
+                            && !g.contrainteAllignee(robots[0], robots[2], n1)) {
+                            if (!n1.samePosition(robots[1]) && !n1.samePosition(robots[2])) {
+                                conf.add(new Configuration(n1, robots[1], robots[2]));
+                            }
                         }
                     }
                 }
@@ -83,10 +98,12 @@ public class Plateau {
         } else if (robot == 1) {
             for (Noeud n1 : g.getNodes()) {
                 if (robots[1].getX() == n1.getX() || robots[1].getY() == n1.getY()) {
-                    if(!g.contrainteAllignee(robots[1],robots[0],n1)
-                        && !g.contrainteAllignee(robots[1],robots[2],n1)) {
-                        if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[2])) {
-                            conf.add(new Configuration(robots[0], n1, robots[2]));
+                    if (g.existeChemin_X(n1, robots[1]) || g.existeChemin_Y(n1, robots[1])) {
+                        if (!g.contrainteAllignee(robots[1], robots[0], n1)
+                            && !g.contrainteAllignee(robots[1], robots[2], n1)) {
+                            if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[2])) {
+                                conf.add(new Configuration(robots[0], n1, robots[2]));
+                            }
                         }
                     }
                 }
@@ -95,10 +112,12 @@ public class Plateau {
         } else if (robot == 2) {
             for (Noeud n1 : g.getNodes()) {
                 if (robots[2].getX() == n1.getX() || robots[2].getY() == n1.getY()) {
-                    if(!g.contrainteAllignee(robots[2],robots[0],n1)
-                        && !g.contrainteAllignee(robots[2],robots[1],n1)) {
-                        if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[1])) {
-                            conf.add(new Configuration(robots[0], robots[1], n1));
+                    if (g.existeChemin_X (n1 ,robots[2]) || g.existeChemin_Y (n1 ,robots[2])) {
+                        if (!g.contrainteAllignee(robots[2], robots[0], n1)
+                            && !g.contrainteAllignee(robots[2], robots[1], n1)) {
+                            if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[1])) {
+                                conf.add(new Configuration(robots[0], robots[1], n1));
+                            }
                         }
                     }
                 }
@@ -127,14 +146,14 @@ public class Plateau {
             current = aTraiter.get(0);
             aTraiter.remove(0);
             visite.add(current);
-
             robots[0] = current.getV1();
             robots[1] = current.getV2();
             robots[2] = current.getV3();
             for (int i = 0; i < 3; i++) {
                 nouveauxCoups = access(i);
-                for(Configuration c : nouveauxCoups) {
+                for (Configuration c : nouveauxCoups) {
                     if (!visite.contains(c)) {
+                        //System.out.println(c.printConfig());
                         aTraiter.add(c);
                         coups.addConfig(c);
                         current.addDualLink(c,current.generateCost(c));

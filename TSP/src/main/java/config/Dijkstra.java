@@ -83,12 +83,11 @@ public class Dijkstra {
         }
 
         //affichage txt de la table de routage
-        System.out.println("Source : "
+        /*System.out.println("Source : "
             + source.printConfig()+ "  Destination : "
             + dest.printConfig() + "  "
         );
-
-        System.out.println(afficherDijkstraTxt(dist,pred));
+        System.out.println(afficherDijkstraTxt(dist,pred));*/
 
         //exploitation de la table
         chemin = exploiterTableRoutage(dist,pred,source,dest);

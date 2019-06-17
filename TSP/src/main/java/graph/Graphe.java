@@ -463,8 +463,98 @@ public class Graphe {
     }
 
 
+    public String printFormeGrille() {
+            String s ="";
+            int dim_y = 0;
+            int dim_x = 0;
+            for (Noeud n : nodes) {
+                if ((int)n.getX() > dim_x) {
+                    dim_x = (int)n.getX();
+                }
+                if ((int)n.getY() > dim_y) {
+                    dim_y = (int)n.getY();
+                }
+            }
+            //System.out.println(dim_x + " " + dim_y);
+            Noeud graphe [][] = new Noeud[dim_x + 1][dim_y + 1];
+            for (int i = 0; i < graphe.length; i++) {
+                for (int j = 0; j < graphe[i].length; j++) {
+                    graphe[i][j] = new Noeud();
+                }
+            }
+            for (Noeud n : nodes) {
+                graphe[(int)n.getX()][(int)n.getY()] = n;
+            }
 
 
+            for (int i = 0; i < graphe.length; i++) {
+                for (int j = 0 ; j < graphe[i].length ; j++) {
+                    if(graphe[i][j].getArcs().size() > 0) {
+                        s += graphe[i][j].getNom() + "\t";
+                    } else {
+                        s += " X ";
+                    }
+                }
+                s += "\n";
+            }
+            return s;
+    }
+
+
+    /**
+     * Existe un chemin sur la meme ligne
+     * @param n1
+     * @param n2
+     * @return
+     */
+    public boolean existeChemin_X (Noeud n1 ,Noeud n2) {
+        List<Noeud> visite = new ArrayList<Noeud>();
+        List<Noeud> aTraiter = new ArrayList<Noeud>();
+        Noeud current;
+        aTraiter.add(n1);
+        while (!aTraiter.isEmpty()) {
+            current = aTraiter.get(0);
+            aTraiter.remove(0);
+            for (Arc a : current.getArcs()) {
+                if (a.getFin() == n2 && a.getFin().getX() == n1.getX()) {
+                    return true;
+                } else if (!visite.contains(a.getFin()) && a.getFin().getX() == n1.getX()) {
+                    aTraiter.add(a.getFin());
+                    visite.add(a.getFin());
+                }
+            }
+
+        }
+        return false;
+    }
+
+
+    /**
+     * Existe un chemin sur la meme colonne
+     * @param n1
+     * @param n2
+     * @return
+     */
+    public boolean existeChemin_Y (Noeud n1 ,Noeud n2) {
+        List<Noeud> visite = new ArrayList<Noeud>();
+        List<Noeud> aTraiter = new ArrayList<Noeud>();
+        Noeud current;
+        aTraiter.add(n1);
+        while (!aTraiter.isEmpty()) {
+            current = aTraiter.get(0);
+            aTraiter.remove(0);
+            for (Arc a : current.getArcs()) {
+                if (a.getFin() == n2 && a.getFin().getY() == n1.getY()) {
+                    return true;
+                } else if (!visite.contains(a.getFin()) && a.getFin().getY() == n1.getY()) {
+                    aTraiter.add(a.getFin());
+                    visite.add(a.getFin());
+                }
+            }
+
+        }
+        return false;
+    }
 
 
 
