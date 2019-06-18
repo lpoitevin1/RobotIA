@@ -1,7 +1,9 @@
 package Plateau;
 
+import config.ArcConfig;
 import config.Configuration;
 import config.GraphConfig;
+import graph.Arc;
 import graph.Graphe;
 import graph.Noeud;
 
@@ -83,12 +85,14 @@ public class Plateau {
         List<Configuration> conf = new ArrayList<Configuration>();
         if (robot == 0) {
             for (Noeud n1 : g.getNodes()) {
-                if(robots[0].getX() == n1.getX() || robots[0].getY() == n1.getY()) {
+                if (robots[0].getX() == n1.getX() || robots[0].getY() == n1.getY()) {
                     if (g.existeChemin_X (n1 ,robots[0]) || g.existeChemin_Y (n1 ,robots[0])) {
                         if (!g.contrainteAllignee(robots[0], robots[1], n1)
                             && !g.contrainteAllignee(robots[0], robots[2], n1)) {
                             if (!n1.samePosition(robots[1]) && !n1.samePosition(robots[2])) {
-                                conf.add(new Configuration(n1, robots[1], robots[2]));
+                                if(robots[0].finDeLigne(n1,robots[1],robots[2])) {
+                                    conf.add(new Configuration(n1, robots[1], robots[2]));
+                                }
                             }
                         }
                     }
@@ -102,7 +106,9 @@ public class Plateau {
                         if (!g.contrainteAllignee(robots[1], robots[0], n1)
                             && !g.contrainteAllignee(robots[1], robots[2], n1)) {
                             if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[2])) {
-                                conf.add(new Configuration(robots[0], n1, robots[2]));
+                                if (robots[1].finDeLigne(n1,robots[0],robots[2])) {
+                                    conf.add(new Configuration(robots[0], n1, robots[2]));
+                                }
                             }
                         }
                     }
@@ -116,7 +122,9 @@ public class Plateau {
                         if (!g.contrainteAllignee(robots[2], robots[0], n1)
                             && !g.contrainteAllignee(robots[2], robots[1], n1)) {
                             if (!n1.samePosition(robots[0]) && !n1.samePosition(robots[1])) {
-                                conf.add(new Configuration(robots[0], robots[1], n1));
+                                if(robots[2].finDeLigne(n1,robots[0],robots[1])) {
+                                    conf.add(new Configuration(robots[0], robots[1], n1));
+                                }
                             }
                         }
                     }
@@ -131,6 +139,29 @@ public class Plateau {
         }
         return conf;
     }
+
+    /**
+     * Test des contraintes pour le robot 0
+     * @param destination Noeud destination
+     * @return boolean
+     */
+    public boolean testContraintes(Noeud destination) {
+
+        if(robots[0].getX() == destination.getX() || robots[0].getY() == destination.getY()) {
+            if (g.existeChemin_X (destination ,robots[0]) || g.existeChemin_Y (destination ,robots[0])) {
+                if (!g.contrainteAllignee(robots[0], robots[1], destination)
+                    && !g.contrainteAllignee(robots[0], robots[2], destination)) {
+                    if (!destination.samePosition(robots[1]) && !destination.samePosition(robots[2])) {
+                        return robots[0].finDeLigne(destination,robots[1],robots[2]);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
 
 
 
@@ -153,18 +184,28 @@ public class Plateau {
                 nouveauxCoups = access(i);
                 for (Configuration c : nouveauxCoups) {
                     if (!visite.contains(c)) {
-                        //System.out.println(c.printConfig());
-                        aTraiter.add(c);
-                        coups.addConfig(c);
-                        current.addDualLink(c,current.generateCost(c));
+
+                            coups.addConfig(c);
+                            current.addLink(c, current.generateCost(c));
+                            aTraiter.add(c);
+                        }
+                    for (Configuration c2 : coups.getNodes()) {
+                        System.out.println(c2.printConfig());
                     }
+                    System.out.println();
                     if (c.getV1().samePosition(objectif)) {
+                        //sortie standard
                         return c;
                     }
                 }
             }
         }
-        return new Configuration();
+
+
+
+        //sortie d'erreur
+        return source;
     }
+
 
 }

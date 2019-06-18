@@ -463,42 +463,7 @@ public class Graphe {
     }
 
 
-    public String printFormeGrille() {
-            String s ="";
-            int dim_y = 0;
-            int dim_x = 0;
-            for (Noeud n : nodes) {
-                if ((int)n.getX() > dim_x) {
-                    dim_x = (int)n.getX();
-                }
-                if ((int)n.getY() > dim_y) {
-                    dim_y = (int)n.getY();
-                }
-            }
-            //System.out.println(dim_x + " " + dim_y);
-            Noeud graphe [][] = new Noeud[dim_x + 1][dim_y + 1];
-            for (int i = 0; i < graphe.length; i++) {
-                for (int j = 0; j < graphe[i].length; j++) {
-                    graphe[i][j] = new Noeud();
-                }
-            }
-            for (Noeud n : nodes) {
-                graphe[(int)n.getX()][(int)n.getY()] = n;
-            }
 
-
-            for (int i = 0; i < graphe.length; i++) {
-                for (int j = 0 ; j < graphe[i].length ; j++) {
-                    if(graphe[i][j].getArcs().size() > 0) {
-                        s += graphe[i][j].getNom() + "\t";
-                    } else {
-                        s += " X ";
-                    }
-                }
-                s += "\n";
-            }
-            return s;
-    }
 
 
     /**
@@ -555,6 +520,7 @@ public class Graphe {
         }
         return false;
     }
+
 
 
 

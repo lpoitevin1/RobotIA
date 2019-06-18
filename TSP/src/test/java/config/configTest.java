@@ -136,8 +136,4 @@ public class configTest {
         assert(g.contrainteAllignee(n2,n3,n4));
     }
 
-    @Test
-    public void printFormeGrille() {
-        System.out.println(g.printFormeGrille());
-    }
 }

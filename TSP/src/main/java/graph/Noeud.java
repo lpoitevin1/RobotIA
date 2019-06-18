@@ -171,6 +171,42 @@ public class Noeud {
     }
 
 
+    /**
+     * Teste si se situe en fin de chemin
+     * @param n2 Nouvelle position voiture 1
+     * @param n3 Voiture 2
+     * @param n4 Voiture 3
+     * @return
+     */
+    public boolean finDeLigne(Noeud n2 , Noeud n3 , Noeud n4) {
+        //recherche fin de collonne
+
+        if (n2.getX() != this.getX() && n2.getY() != this.getY()) {
+            return false;
+        }
+        if ( n2.getX() == this.getX()) {
+            for (Arc a : n2.getArcs()) {
+                Noeud n = a.getFin();
+                if (n.getX() == this.getX() && !n.equalsNode(n3) && !n.equalsNode((n4))) {
+                    if (n.distEuclidianNode(this) > n2.distEuclidianNode(this)) {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            for (Arc a : n2.getArcs()) {
+                Noeud n = a.getFin();
+                if (n.getY() == this.getY() && !n.equalsNode(n3) && !n.equalsNode((n4))) {
+                    if (n.distEuclidianNode(this) > n2.distEuclidianNode(this)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
 }
 
 

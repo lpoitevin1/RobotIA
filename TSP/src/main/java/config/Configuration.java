@@ -98,6 +98,11 @@ public class Configuration {
     }
 
 
+    /**
+     * genere le cout d'une arete pour une 2 configurations
+     * @param c2
+     * @return double
+     */
     public double generateCost(Configuration c2){
         return v1.distEuclidianNode(c2.v1)
             + v2.distEuclidianNode(c2.v2)
@@ -135,6 +140,12 @@ public class Configuration {
 
     public String printConfig() {
         return " [ " + v1.getNom() +" ; "+  v2.getNom() +" ; "+  v3.getNom() +" ] ";
+    }
+
+    public String printConfigX_Y() {
+        return " [ (" + v1.getX()+ ";"+ v1.getY() +") ; ("
+            + v2.getX()+ ";"+ v2.getY() +") ; ("
+            + v3.getX()+ ";"+ v3.getY() +")] ";
     }
 
 
