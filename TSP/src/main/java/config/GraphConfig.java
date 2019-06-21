@@ -39,13 +39,13 @@ public class GraphConfig {
         int id = c.getiD();
         Configuration mirror = new Configuration(id,n1,n3,n2);
 
+
        for (Configuration n : nodes) {
            if (n.eq(c) || n.eq(mirror)) {
                return;
            }
-        }
-        nodes.add(c);
-
+       }
+       nodes.add(c);
     }
 
 
@@ -77,4 +77,5 @@ public class GraphConfig {
         //generate
        return new ArrayList<Configuration>();
     }
+
 }

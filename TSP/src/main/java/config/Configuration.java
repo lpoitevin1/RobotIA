@@ -40,9 +40,30 @@ public class Configuration {
     }
 
 
-    public List<ArcConfig> getVoisins() {
-        return voisin;
+    /**
+     * teste si this a pour voisin la configuration c
+     * @param c Configuration
+     * @return boolean
+     */
+    public boolean estVoisin(Configuration c) {
+        for( ArcConfig a : voisin) {
+            if(a.getFin().eq(c)) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    /**
+     * retourne vrai si seulement une voiture a effectuer un mouvement
+     * @return boolean
+     */
+    public boolean configurationVoisine(Configuration c) {
+        return (this.v1 == c.v1 && this.v2==c.v2)
+            || (this.v2 == c.v2 && this.v3==c.v3)
+            || (this.v1 == c.v1 && this.v3==c.v3);
+    }
+
 
     public List<ArcConfig> getVoisin() {
         return voisin;

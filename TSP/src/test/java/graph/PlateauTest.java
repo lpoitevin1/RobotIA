@@ -1,8 +1,10 @@
 package graph;
 
 import Plateau.Plateau;
+import config.ArcConfig;
 import config.Configuration;
 import config.Dijkstra;
+import config.GraphConfig;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,15 +91,38 @@ public class PlateauTest {
 
         p.setRobots(r1,r2,r3);
         p.setObjectif(obj);
-        System.out.println(p.print());
+
 
         Configuration source = new Configuration(p.getRobots());
         Configuration result = p.bruteForce(source,p.getObjectif());
         if(source!=result) {
             dik = new Dijkstra(p.getCoups());
-            System.out.println(dik.existeChemin(source,result));
-            dik = new Dijkstra(p.getCoups());
-            dik.djikstraRoutage(source,result);
+            System.out.println("existe chemin : " + dik.existeChemin(source,result));
+
+
+            GraphConfig graph = dik.getG();
+
+
+            Configuration c4 = graph.getNodes().get(4);
+            Configuration c16 = graph.getNodes().get(16);
+
+
+            assert(source.estVoisin(c4));
+            assert(c4.estVoisin(c16));
+            assert(c16.estVoisin(result));
+            /*
+            System.out.println(graph.getNodes().size());
+            System.out.println(source.printConfig() + "----> "+ c4.printConfig());
+            System.out.println(c4.printConfig()+ "----> "+ c16.printConfig());
+            System.out.println(c16.printConfig()+ "----> "+result.printConfig());
+            */
+
+
+           /*
+            for(Configuration c : dik.getG().getNodes()) {
+                System.out.println(c.printConfig());
+            }*/
+            dik.plusCoutChemin(source,result);
         }
 
     }
@@ -138,6 +163,10 @@ public class PlateauTest {
 
 
         assert(g.existeChemin(g.getNodes().get(0), g.getNodes().get(1)));
+        assert(g.existeChemin(g.getNodes().get(0), g.getNodes().get(8)));
+        assert(g.existeChemin(g.getNodes().get(8), g.getNodes().get(11)));
+        assert(g.existeChemin(g.getNodes().get(13), g.getNodes().get(12)));
+        assert(g.existeChemin(g.getNodes().get(0), g.getNodes().get(1)));
         assert(g.existeChemin(g.getNodes().get(0), g.getNodes().get(3)));
         assert(g.existeChemin(g.getNodes().get(0), g.getNodes().get(5)));
 
@@ -149,6 +178,115 @@ public class PlateauTest {
         assert(!g.existeChemin_Y(g.getNodes().get(0), g.getNodes().get(1)));
         assert(!g.existeChemin_Y(g.getNodes().get(0), g.getNodes().get(5)));
 
+    }
+
+    @Test
+    public void TestGrille5x5(){
+        /**
+         * 22  23  24  25
+         * 18  19  20  21
+         * 14  15  16  17
+         * 10  11  12  13
+         * 5  6  7  8  9
+         * 0  1  2  3  4
+         */
+
+        p = new Plateau ("node_grille5x5","link_grille5x5");
+        g = p.getG();
+
+        for(int i = 0 ; i < 4 ; i++) {
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+1)));
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+5)));
+        }
+
+        for(int i = 5 ; i < 9 ; i++) {
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+1)));
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+5)));
+        }
+
+        for(int i = 10 ; i < 14 ; i++) {
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+1)));
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+5)));
+        }
+
+        for(int i = 15 ; i < 19 ; i++) {
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+1)));
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+5)));
+        }
+
+        for(int i = 20 ; i < 24 ; i++) {
+            assert(g.getNodes().get(i).estVoisin(g.getNodes().get(i+1)));
+        }
+    }
+
+
+
+    @Test
+    public void testsimple5x5() {
+        /**
+         * 22  23  24  25
+         * 18  19  20  21
+         * 14  15  16  17
+         * 10  11  12  13
+         * 5  6  7  8  9
+         * 0  1  2  3  4
+         */
+
+        p = new Plateau ("node_grille5x5","link_grille5x5");
+        g = p.getG();
+
+
+        Noeud r1 = g.getNodes().get(0);
+        Noeud r2 = g.getNodes().get(1);
+        Noeud r3 = g.getNodes().get(2);
+        Noeud obj = g.getNodes().get(24);
+
+        p.setRobots(r1,r2,r3);
+        p.setObjectif(obj);
+
+        Configuration source = new Configuration(p.getRobots());
+        Configuration result = p.bruteForce(source,p.getObjectif());
+
+        if(source!=result) {
+            dik = new Dijkstra(p.getCoups());
+            dik.plusCoutChemin(source,result);
+        }
+    }
+
+
+
+
+
+    @Test
+    public void test2_5x5() {
+        /**
+         * 22  23  24  25
+         * 18  19  20  21
+         * 14  15  16  17
+         * 10  11  12  13
+         * 5  6  7  8  9
+         * 0  1  2  3  4
+         */
+
+        p = new Plateau ("node_grille5x5","link_grille5x5");
+        g = p.getG();
+
+
+        Noeud r1 = g.getNodes().get(0);
+        Noeud r2 = g.getNodes().get(1);
+        Noeud r3 = g.getNodes().get(2);
+        Noeud obj = g.getNodes().get(18);
+
+        p.setRobots(r1,r2,r3);
+        p.setObjectif(obj);
+
+        Configuration source = new Configuration(p.getRobots());
+        Configuration result = p.bruteForce(source,p.getObjectif());
+
+        if(source!=result) {
+            dik = new Dijkstra(p.getCoups());
+            dik.plusCoutChemin(source,result);
+        }
     }
 
 

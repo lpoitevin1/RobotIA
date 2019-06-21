@@ -161,10 +161,12 @@ public class Plateau {
     }
 
 
-
-
-
-
+    /**
+     * boucle de generate & test
+     * @param source Noeud source
+     * @param dest Noeud destination
+     * @return Configuration a atteindre pour résoudre le probleme
+     */
     public Configuration bruteForce(Configuration source, Noeud dest) {
         objectif = dest;
         List<Configuration> visite = new ArrayList<Configuration>();
@@ -183,27 +185,24 @@ public class Plateau {
             for (int i = 0; i < 3; i++) {
                 nouveauxCoups = access(i);
                 for (Configuration c : nouveauxCoups) {
-                    if (!visite.contains(c)) {
-
+                    if (!visite.contains(c) && current.configurationVoisine(c)) {
                             coups.addConfig(c);
-                            current.addLink(c, current.generateCost(c));
+                            current.addDualLink(c, current.generateCost(c));
                             aTraiter.add(c);
-                        }
-                    for (Configuration c2 : coups.getNodes()) {
-                        System.out.println(c2.printConfig());
                     }
-                    System.out.println();
                     if (c.getV1().samePosition(objectif)) {
                         //sortie standard
+                        for(Configuration c2 : coups.getNodes()) {
+                            System.out.println(c2.printConfig());
+                        }
+
+
                         return c;
                     }
                 }
             }
         }
-
-
-
-        //sortie d'erreur
+    //sortie d'erreur
         return source;
     }
 

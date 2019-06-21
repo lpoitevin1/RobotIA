@@ -207,6 +207,17 @@ public class Noeud {
     }
 
 
+
+    public boolean estVoisin(Noeud c) {
+        for( Arc a : arcs) {
+            if(a.getFin().equalsNode(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
 
 

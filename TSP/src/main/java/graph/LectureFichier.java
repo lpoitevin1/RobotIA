@@ -89,14 +89,14 @@ public class LectureFichier {
             Noeud node2 = new Noeud();
             while ((ligne = fichier.readLine()) != null) {
                 String[] out = ligne.split(" ");
-                if (out.length < 4) {
+                if (out.length < 3) {
                     break;
                 } else {
                     n1 = out[0];
                     n2 = out[1];
 
                     dist = Double.parseDouble(out[2]);
-                    dir = out[3].charAt(0);
+                    //dir = out[3].charAt(0);
                 }
 
                 for(Noeud n : nodes) {

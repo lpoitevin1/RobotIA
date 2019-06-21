@@ -38,12 +38,9 @@ public class Dijkstra {
         for (Configuration n : g.getNodes()) {
             dist[n.getiD()] = Double.MAX_VALUE;
             aTraiter.add(n.getiD());
-
         }
         dist[source.getiD()] = 0;
-
         while (!aTraiter.isEmpty()) {
-
             //on traite le noeud ayant la distance la plus faible
             if (aTraiter.size() > 1) {
                 double distMin = Double.MAX_VALUE;
@@ -54,15 +51,12 @@ public class Dijkstra {
                         index = i;
                     }
                 }
-
             } else  {
                 // cas ou la queue n'a plus qu'un element
                 index = aTraiter.get(0);
                 aTraiter.remove(0);
             }
-
-
-            for(int i = 0;i < aTraiter.size(); i++ ) {
+            for (int i = 0;i < aTraiter.size(); i++ ) {
                 if (aTraiter.get(i).equals(index)) {
                     aTraiter.remove(i);
                     break;
@@ -71,7 +65,7 @@ public class Dijkstra {
 
             curendNode = g.getNodes().get(index);
 
-            for(ArcConfig voisin : curendNode.getVoisin()) {
+            for (ArcConfig voisin : curendNode.getVoisin()) {
                 //on calcule la somme la distance pour acceder au noeud actuel + le cout de l'arc
                 int idNext = voisin.getFin().getiD();
                 double cost = dist[index] + voisin.getCout();
@@ -89,11 +83,27 @@ public class Dijkstra {
         );
         System.out.println(afficherDijkstraTxt(dist,pred));*/
 
+        for (int i = 0; i < dist.length; i++) {
+            if (pred[i] != null) {
+                System.out.print(g.getNodes().get(i).printConfig() +" "+
+                    pred[i].printConfig() + " " + dist[i] + "\n");
+            }
+        }
+
         //exploitation de la table
         chemin = exploiterTableRoutage(dist,pred,source,dest);
 
+
         //affichage du chemin
         System.out.println(afficherChemin (chemin));
+
+        /*for (int i = 0 ; i < dist.length; i++) {
+            System.out.print(g.getNodes().get(i).printConfig() + " -> " + dist[i] +" ");
+            if(pred[i]!=null) {
+                System.out.print(pred[i].printConfig());
+            }
+            System.out.println("\n");
+        }*/
 
         return chemin;
     }
@@ -148,7 +158,6 @@ public class Dijkstra {
         queue.add(dest);
         Configuration currentDest;
         Configuration currentPred;
-
         while (!queue.isEmpty()) {
             currentDest = queue.poll();
             if (dist[currentDest.getiD()] < Double.MAX_VALUE
@@ -156,7 +165,7 @@ public class Dijkstra {
                 // la distance n'est pas maximale et le noeud a bien un predecesseur
 
                 currentPred = pred[currentDest.getiD()];
-                //System.out.println("current Dest " + currentDest.getNom() + " current Pred " + currentPred.getNom());
+                //System.out.println(currentDest.printConfig());
                 cheminInv.add(currentDest);
                 queue.add(currentPred);
 
@@ -172,8 +181,18 @@ public class Dijkstra {
             chemin.add(cheminInv.get(i));
         }
         cheminInv.clear();
+
+        /*
+        for(int i = 0 ; i < chemin.size(); i++) {
+            int j = i+1;
+            if (j < chemin.size() ) {
+                System.out.println(chemin.get(i).printConfig() +" -> " + chemin.get(j).printConfig());
+                System.out.println(chemin.get(i).estVoisin(chemin.get(j)));
+            }
+        }*/
         return chemin;
     }
+
 
     /**
      * affiche le chemin en txt
@@ -224,7 +243,7 @@ public class Dijkstra {
         while (!aTraiter.isEmpty()) {
             current = aTraiter.get(0);
             aTraiter.remove(0);
-            for (ArcConfig a : current.getVoisins()) {
+            for (ArcConfig a : current.getVoisin()) {
                 if (a.getFin() == n2) {
                     return true;
                 } else if (!visite.contains(a.getFin())) {
@@ -250,6 +269,8 @@ public class Dijkstra {
             return new ArrayList<Configuration>();
         }
     }
+
+
 
 
 
