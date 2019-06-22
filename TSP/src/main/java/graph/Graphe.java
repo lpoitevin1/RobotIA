@@ -481,9 +481,9 @@ public class Graphe {
             current = aTraiter.get(0);
             aTraiter.remove(0);
             for (Arc a : current.getArcs()) {
-                if (a.getFin() == n2 && a.getFin().getX() == n1.getX()) {
+                if (a.getFin() == n2 && a.getFin().getY() == n1.getY()) {
                     return true;
-                } else if (!visite.contains(a.getFin()) && a.getFin().getX() == n1.getX()) {
+                } else if (!visite.contains(a.getFin()) && a.getFin().getY() == n1.getY()) {
                     aTraiter.add(a.getFin());
                     visite.add(a.getFin());
                 }
@@ -509,9 +509,9 @@ public class Graphe {
             current = aTraiter.get(0);
             aTraiter.remove(0);
             for (Arc a : current.getArcs()) {
-                if (a.getFin() == n2 && a.getFin().getY() == n1.getY()) {
+                if (a.getFin() == n2 && a.getFin().getX() == n1.getX()) {
                     return true;
-                } else if (!visite.contains(a.getFin()) && a.getFin().getY() == n1.getY()) {
+                } else if (!visite.contains(a.getFin()) && a.getFin().getX() == n1.getX()) {
                     aTraiter.add(a.getFin());
                     visite.add(a.getFin());
                 }
@@ -522,6 +522,21 @@ public class Graphe {
     }
 
 
+    /**
+     * retourne le Noeud avec les parametres correspondant du graphe
+     * ATTENTION LE NOEUD DOIT EXISTER , si le noeud n'existe pas la fonction renvois le noeud vide
+     * @param x abscisse
+     * @param y ordonnée
+     * @return Noeud
+     */
+    public Noeud findNode(double x , double y) {
+        for(Noeud n : nodes) {
+            if (n.getX() == x && n.getY() == y) {
+                return n;
+            }
+        }
+        return new Noeud();
+    }
 
 
 }

@@ -1,42 +1,44 @@
 package graph;
 
+import Plateau.Plateau;
+import config.Configuration;
+import config.Dijkstra;
+
 public class main {
-        public static void main (String [] args) {
 
+    public static void main(String[] args) {
 
-            /*          A
-                      /   \
-            *        B      C
-            *         \   /   \
-            *           D  ___ E
-            *
-            * */
+        /**
+         *
+         *
+         *
+         * 20   21  22  23  24
+         * 15   X  17  X  19
+         * 10   X  X   X  14
+         * 5    6   7   8   9
+         * 0    1   2   3   4
+         */
 
+        Plateau p = new Plateau("node_grille_mur5x5", "link_grille_mur5x5");
+        Graphe g = p.getG();
 
-            Graphe g = new Graphe();
+        Noeud r1 = g.getNodes().get(0);
+        Noeud r2 = g.getNodes().get(1);
+        Noeud r3 = g.getNodes().get(2);
 
-            Noeud n1 = new Noeud(0);
-            Noeud n2 = new Noeud(1);
-            Noeud n3 = new Noeud(2);
-            Noeud n4 = new Noeud(3);
-            Noeud n5 = new Noeud(4);
+        //Noeud obj = g.getNodes().get(17);
+        Noeud obj = g.findNode(2,3);
 
-            g.addNode(n1);
-            g.addNode(n2);
-            g.addNode(n3);
-            g.addNode(n4);
-            g.addNode(n5);
+        p.setRobots(r1, r2, r3);
+        p.setObjectif(obj);
 
+        Configuration source = new Configuration(p.getRobots());
+        Configuration result = p.bruteForce(source, p.getObjectif());
 
-            n1.addDualLink(n2 ,1);
-            n1.addDualLink(n3,4);
-
-            n2.addDualLink(n4,8);
-            n3.addDualLink(n4,7);
-
-            n3.addDualLink(n5,1);
-            n4.addDualLink(n5,8);
-
+        if (source != result) {
+            Dijkstra dik = new Dijkstra(p.getCoups());
+            dik.plusCoutChemin(source, result);
         }
+    }
 }
 

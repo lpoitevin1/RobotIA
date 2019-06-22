@@ -95,38 +95,13 @@ public class PlateauTest {
         Configuration result = p.bruteForce(source,p.getObjectif());
         if(source!=result) {
             dik = new Dijkstra(p.getCoups());
-            System.out.println("existe chemin : " + dik.existeChemin(source,result));
-
-
-            GraphConfig graph = dik.getG();
-
-
-            Configuration c4 = graph.getNodes().get(4);
-            Configuration c16 = graph.getNodes().get(16);
-
-
-            assert(source.estVoisin(c4));
-            assert(c4.estVoisin(c16));
-            assert(c16.estVoisin(result));
-            /*
-            System.out.println(graph.getNodes().size());
-            System.out.println(source.printConfig() + "----> "+ c4.printConfig());
-            System.out.println(c4.printConfig()+ "----> "+ c16.printConfig());
-            System.out.println(c16.printConfig()+ "----> "+result.printConfig());
-            */
-
-
-           /*
-            for(Configuration c : dik.getG().getNodes()) {
-                System.out.println(c.printConfig());
-            }*/
             dik.plusCoutChemin(source,result);
         }
 
     }
 
     @Test
-    public void finLigne() {
+    public void TestfinLigne() {
         p = new Plateau ("nodeGrille_3","linkGrille_3");
         g = p.getG();
 
@@ -368,7 +343,7 @@ public class PlateauTest {
 
 
     @Test
-    public void TestContraintes() {
+    public void TestfichierGrille_3() {
 
 
         /**
