@@ -5,7 +5,7 @@ public class ArcConfig {
         private Configuration fin;
         private double cout;
 
-        public ArcConfig (Configuration n1 , Configuration n2 , double c) {
+        public ArcConfig (Configuration n1, Configuration n2, double c) {
             debut = n1;
             fin = n2;
             cout = c;
@@ -40,16 +40,6 @@ public class ArcConfig {
         public void setFin(Configuration fin) {
             this.fin = fin;
         }
-
-
-        public boolean isEquals(graph.Arc a) {
-            boolean deb = debut.equals(a.getDebut());
-            boolean fi = fin.equals(a.getFin());
-
-            return (cout == a.getCout() && deb && fi);
-
-        }
-
 
 
         @Override

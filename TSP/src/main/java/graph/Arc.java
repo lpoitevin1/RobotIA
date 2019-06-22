@@ -45,6 +45,11 @@ public class Arc {
     }
 
 
+    /**
+     * Test egalité Arc
+     * @param a Arc a tester
+     * @return boolean
+     */
     public boolean isEquals(Arc a) {
         boolean deb = debut.equals(a.getDebut());
         boolean fi = fin.equals(a.getFin());
@@ -52,32 +57,7 @@ public class Arc {
         return (cout == a.getCout() && deb && fi);
 
     }
-/*
-    public int angle (Arc a) {
-        int angle = 0;
 
-        if ((this.direction == 'N' || this.direction == 'S' || this.direction == 'O' || this.direction == 'E')
-            && (a.direction == 'N' || a.direction == 'S' || a.direction == 'O' || a.direction == 'E')) {
-            if (this.direction == a.direction) {
-                angle = 0;
-            } else if (this.direction == 'N' && a.direction == 'E'
-                    || this.direction == 'O' && a.direction == 'N'
-                    || this.direction == 'E' && a.direction == 'S'
-                    || this.direction == 'S' && a.direction == 'O') {
-                angle = 90;
-            } else if (this.direction == 'E' && a.direction == 'N'
-                    || this.direction == 'O' && a.direction == 'S'
-                    || this.direction == 'S' && a.direction == 'E'
-                    || this.direction == 'N' && a.direction == 'O') {
-                angle = -90;
-            } else {
-                angle = 180;
-            }
-        }
-
-        return angle;
-    }
-*/
 
 
 

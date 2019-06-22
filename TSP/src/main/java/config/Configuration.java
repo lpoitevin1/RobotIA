@@ -158,11 +158,18 @@ public class Configuration {
     }
 
 
-
+    /**
+     * Affichage Configuration sous la forme [n0;n1;n2]
+     * @return String
+     */
     public String printConfig() {
         return " [ " + v1.getNom() +" ; "+  v2.getNom() +" ; "+  v3.getNom() +" ] ";
     }
 
+    /**
+     * Affichage Configuration sous la forme [(0;0) ; (0;1); (1;0)]
+     * @return String
+     */
     public String printConfigX_Y() {
         return " [ (" + v1.getX()+ ";"+ v1.getY() +") ; ("
             + v2.getX()+ ";"+ v2.getY() +") ; ("

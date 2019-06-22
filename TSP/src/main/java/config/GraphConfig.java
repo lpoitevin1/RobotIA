@@ -49,8 +49,10 @@ public class GraphConfig {
     }
 
 
-
-
+    /**
+     * Affichage des Configurations
+     * @return String
+     */
     public String afficher() {
         String s ="";
 

@@ -1,13 +1,13 @@
 package Plateau;
 
-import config.ArcConfig;
+
 import config.Configuration;
 import config.GraphConfig;
-import graph.Arc;
+
 import graph.Graphe;
 import graph.Noeud;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +57,13 @@ public class Plateau {
         this.objectif = objectif;
     }
 
+
+    /**
+     * Initialisation de tous les robots aux noeuds
+     * @param n1 Noeuds n1 -> (robot 0)
+     * @param n2 Noeuds n2 -> (robot 1)
+     * @param n3 Noeuds n3 -> (robot 2)
+     */
     public void setRobots(Noeud n1, Noeud n2, Noeud n3) {
         this.robots[0] = n1;
         this.robots[1] = n2;
@@ -64,6 +71,11 @@ public class Plateau {
 
     }
 
+    /**
+     * Initialisation de la position d'un robot a un noeud du graphe
+     * @param n Noeud
+     * @param index identifiant du robot
+     */
     public void setRobots(Noeud n, int index) {
         robots[index] = n;
     }
@@ -165,42 +177,63 @@ public class Plateau {
      * boucle de generate & test
      * @param source Noeud source
      * @param dest Noeud destination
-     * @return Configuration a atteindre pour résoudre le probleme
+     * @return Configuration a atteindre si le probleme est resolvable
+     *  sinon retourne la configuration source
      */
     public Configuration bruteForce(Configuration source, Noeud dest) {
         objectif = dest;
         List<Configuration> visite = new ArrayList<Configuration>();
         List<Configuration> aTraiter = new ArrayList<Configuration>();
-        List<Configuration> nouveauxCoups;
+        List<Configuration> nouveauxCoups = new ArrayList<Configuration>();
         Configuration current;
         coups = new GraphConfig(source);
         aTraiter.add(coups.getNodes().get(0));
-        while (!aTraiter.isEmpty()) {
+        int configMax = (int) Math.pow(g.getNodes().size(), 3);
+        boolean valide;
+        while (!aTraiter.isEmpty() || coups.getNodes().size() >= configMax) {
             current = aTraiter.get(0);
             aTraiter.remove(0);
             visite.add(current);
+
+            if (aTraiter.contains(current)) {
+                aTraiter.remove(current);
+            }
             robots[0] = current.getV1();
             robots[1] = current.getV2();
             robots[2] = current.getV3();
+            nouveauxCoups.clear();
             for (int i = 0; i < 3; i++) {
-                nouveauxCoups = access(i);
-                for (Configuration c : nouveauxCoups) {
-                    if (!visite.contains(c) && current.configurationVoisine(c)) {
-                            coups.addConfig(c);
-                            current.addDualLink(c, current.generateCost(c));
-                            aTraiter.add(c);
+                for (Configuration c :access(i) ) {
+                    nouveauxCoups.add(c);
+                }
+            }
+
+            for (Configuration c : nouveauxCoups) {
+
+                valide = true;
+                for (Configuration c2 : visite) {
+                    if (c2.eq(c) ) {
+                        valide = false;
                     }
-                    if (c.getV1().samePosition(objectif)) {
+                }
+
+                for (Configuration c2 : aTraiter) {
+                    if (c2.eq(c) ) {
+                        valide = false;
+                    }
+                }
+
+                if (valide) {
+                    coups.addConfig(c);
+                    current.addDualLink(c, current.generateCost(c));
+                    aTraiter.add(c);
+                }
+
+                if (c.getV1().samePosition(objectif)) {
                         //sortie standard
-                        for(Configuration c2 : coups.getNodes()) {
-                            System.out.println(c2.printConfig());
-                        }
-
-
                         return c;
                     }
                 }
-            }
         }
     //sortie d'erreur
         return source;

@@ -83,28 +83,21 @@ public class Dijkstra {
         );
         System.out.println(afficherDijkstraTxt(dist,pred));*/
 
+
+        // affichage des Noeud destination et de leur Noeud predecesseur
+        /*
         for (int i = 0; i < dist.length; i++) {
             if (pred[i] != null) {
                 System.out.print(g.getNodes().get(i).printConfig() +" "+
                     pred[i].printConfig() + " " + dist[i] + "\n");
             }
-        }
+        }*/
 
         //exploitation de la table
         chemin = exploiterTableRoutage(dist,pred,source,dest);
 
-
         //affichage du chemin
         System.out.println(afficherChemin (chemin));
-
-        /*for (int i = 0 ; i < dist.length; i++) {
-            System.out.print(g.getNodes().get(i).printConfig() + " -> " + dist[i] +" ");
-            if(pred[i]!=null) {
-                System.out.print(pred[i].printConfig());
-            }
-            System.out.println("\n");
-        }*/
-
         return chemin;
     }
 

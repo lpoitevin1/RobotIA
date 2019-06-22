@@ -470,7 +470,7 @@ public class Graphe {
      * Existe un chemin sur la meme ligne
      * @param n1
      * @param n2
-     * @return
+     * @return boolean
      */
     public boolean existeChemin_X (Noeud n1 ,Noeud n2) {
         List<Noeud> visite = new ArrayList<Noeud>();
@@ -498,7 +498,7 @@ public class Graphe {
      * Existe un chemin sur la meme colonne
      * @param n1
      * @param n2
-     * @return
+     * @return boolean
      */
     public boolean existeChemin_Y (Noeud n1 ,Noeud n2) {
         List<Noeud> visite = new ArrayList<Noeud>();

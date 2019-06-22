@@ -14,7 +14,7 @@ public class Noeud {
 
 
 
-    public Noeud (int id ) {
+    public Noeud ( int id) {
         arcs = new ArrayList<Arc>();
         idNoeud = id;
     }
@@ -120,9 +120,16 @@ public class Noeud {
     }
 
 
-
+    /**
+     * Egalité entre deux noeuds
+     * @param n Noeud a tester
+     * @return boolean
+     */
     public boolean equalsNode(Noeud n) {
 
+        if (this.arcs.size() != n.getArcs().size())  {
+            return false;
+        }
         for (int i = 0 ; i < this.arcs.size() ; i++) {
             if (!this.arcs.get(i).isEquals(n.getArcs().get(i))) {
                 return false;
@@ -207,13 +214,17 @@ public class Noeud {
     }
 
 
-
+    /**
+     * Test voisinage
+     * @param c Noeud a tester
+     * @return boolean
+     */
     public boolean estVoisin(Noeud c) {
-        for( Arc a : arcs) {
-            if(a.getFin().equalsNode(c)) {
-                return true;
+            for (Arc a : arcs) {
+                if (a.getFin().equalsNode(c)) {
+                    return true;
+                }
             }
-        }
         return false;
     }
 
