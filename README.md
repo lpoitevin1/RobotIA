@@ -34,11 +34,11 @@ Il est possible de trouver des exemples de résolutions du jeu dans la classe Pl
     
 Les parametres à definir sont les suivants :  
 
-*     Les noms des fichiers contenant les informations du graphe (noeud et aretes).  
-*    La position du premier robot dans le graphe.  
-*     La position du second robot dans le graphe.  
-*     La position du troisieme robot dans le graphe.  
-*     L'objectif à atteindre pour le premier robot.  
+*   Les noms des fichiers contenant les informations du graphe (noeud et aretes).  
+*   La position du premier robot dans le graphe.  
+*   La position du second robot dans le graphe.  
+*   La position du troisieme robot dans le graphe.  
+*   L'objectif à atteindre pour le premier robot.  
 
 
 Il est possible de d'affecter la valeur d'un noeud par sa valeur en abscisse et ordonnée (mais celui ci doit exister dans le graphe).  
